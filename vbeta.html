@@ -3506,25 +3506,6 @@
             }, 3000);
         }
 
-        // Show welcome message
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const notification = document.createElement('div');
-                notification.classList.add('notification');
-                notification.textContent = 'Welcome to Dunc\'s Website!';
-                document.body.appendChild(notification);
-                
-                requestAnimationFrame(() => {
-                    notification.classList.add('show');
-                });
-
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            }, 300); // Reduced delay for faster loading
-        });
-
         // Search functionality
         function showSearch() {
             document.getElementById('searchModal').style.display = 'flex';
@@ -3694,13 +3675,12 @@
             images.forEach(img => imageObserver.observe(img));
         });
 
-        // Show welcome toast on load
         window.addEventListener('load', () => {
             showToast('Welcome to Dunc\'s Website! 👋');
         });
 
         // Add Bing Chiling form handling
-        document.getElementById('bingchilingForm').addEventListener('submit', function(e) {
+        document.getEFlementById('bingchilingForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const selected = document.querySelector('input[name="bingchilling"]:checked');
             if (!selected) {
