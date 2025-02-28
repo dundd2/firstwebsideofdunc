@@ -18,14 +18,14 @@
     <link rel="preload" href="img/bingchiling.png" as="image">
     <link rel="preload" href="css/bootstrap.min.css" as="style">
     
-    <!-- Latest Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome - Local Version -->
+    <link rel="stylesheet" href="css/fontawesome.min.css">
     
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/all.min.css">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for firstwebsideofdunc" href="rss.xml">
-    <script src="https://d3js.org/d3.v7.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/topojson@3/dist/topojson.min.js" defer></script>
+    <script src="js/d3.v7.min.js" defer></script>
+    <script src="js/topojson.min.js" defer></script>
     <style>
         :root {
             --primary-color: #4B9DFF;
@@ -1342,6 +1342,37 @@
             padding: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+        
+        .map-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-fixed {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        .map-svg-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        /* Fixed background for the map */
+        #worldMapSVG {
+            position: relative;
+            width: 100%;
+            height: auto;
+            background-color: #f0f8ff; /* Light blue background */
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        body.dark-mode #worldMapSVG {
+            background-color: #1a2634; /* Dark blue background for dark mode */
+        }
 
         .map-legend {
             font-size: 0.9rem;
@@ -1400,29 +1431,78 @@
         }
         .country-tooltip {
             position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 12px 16px;
+            border-radius: 8px;
             font-size: 14px;
             pointer-events: none;
-            z-index: 1000;
-            transition: opacity 0.3s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            z-index: 1500;
+            transition: opacity 0.3s, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             backdrop-filter: blur(4px);
+            border: 1px solid rgba(0,0,0,0.1);
+            max-width: 250px;
+            transform-origin: top center;
+            animation: tooltip-appear 0.2s ease-out forwards;
+        }
+        
+        @keyframes tooltip-appear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .country-tooltip::after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            border-width: 5px;
-            border-style: solid;
-            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(255, 255, 255, 0.95);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
         }
-
+        
+        .country-tooltip .tooltip-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .country-tooltip .tooltip-detail {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        
+        .country-tooltip .tooltip-detail i {
+            width: 16px;
+            text-align: center;
+            opacity: 0.7;
+        }
+        
+        body.dark-mode .country-tooltip {
+            background: rgba(40, 40, 40, 0.95);
+            color: #fff;
+            border-color: rgba(255,255,255,0.1);
+        }
+        
+        body.dark-mode .country-tooltip::after {
+            border-top-color: rgba(40, 40, 40, 0.95);
+        }
         .visited-year {
             font-size: 12px;
             color: #4B9DFF;
@@ -1928,6 +2008,53 @@
             max-width: 400px;
         }
         
+        .map-search .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+        
+        .map-search .clear-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .map-search .clear-icon:hover {
+            color: #666;
+        }
+        
+        .map-search input {
+            width: 100%;
+            padding-right: 30px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s;
+        }
+        
+        .map-search input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+        
+        body.dark-mode .map-search input {
+            background-color: var(--dark-input-bg);
+            border-color: #444;
+            color: #fff;
+        }
+        
+        body.dark-mode .map-search input:focus {
+            border-color: var(--primary-color);
+        }
+        
         .search-results {
             position: absolute;
             top: 100%;
@@ -1940,6 +2067,7 @@
             overflow-y: auto;
             z-index: 10;
             display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         body.dark-mode .search-results {
@@ -1957,8 +2085,16 @@
             background: #f0f0f0;
         }
         
+        .search-result-item.active {
+            background: #e0e0e0;
+        }
+        
         body.dark-mode .search-result-item:hover {
             background: #333;
+        }
+        
+        body.dark-mode .search-result-item.active {
+            background: #444;
         }
         
         .map-controls {
@@ -2456,6 +2592,183 @@
             width: 0%;
             transition: width 0.2s ease;
         }
+
+        .welcome-card {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode .welcome-card {
+            background: linear-gradient(145deg, #1e1e1e, #252525);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .welcome-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .welcome-divider {
+            height: 4px;
+            width: 80px;
+            background: var(--primary-color);
+            margin: 0 auto;
+            border-radius: 2px;
+            animation: expandWidth 1.5s ease-out;
+        }
+        
+        .welcome-text {
+            animation: fadeIn 1.5s ease-out;
+            font-size: 1.2rem;
+        }
+        
+        .welcome-version {
+            animation: fadeIn 2s ease-out;
+            font-size: 1.1rem;
+        }
+        
+        .welcome-icon {
+            animation: bounceIn 1s ease-out;
+        }
+        
+        .animated-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            border-right: 3px solid var(--primary-color);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 0.15em;
+            animation: typing 3.5s steps(30, end), blink-caret 0.75s step-end infinite;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-color) }
+        }
+        
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 80px; }
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .welcome-card {
+                padding: 30px 20px;
+            }
+            
+            .typing-animation {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Disable floating animation for the Bing Chiling card */
+        #bingchilingCard {
+            animation: none !important;
+            transform: none !important;
+        }
+        
+        /* Make the submit button more prominent and stable */
+        #bingchilingForm .btn-primary {
+            position: relative;
+            z-index: 10;
+            transform: none !important;
+            transition: background-color 0.3s, color 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        #bingchilingForm .btn-primary:hover {
+            transform: none !important;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        /* Stable container for the submit button */
+        .stable-button-container {
+            position: relative;
+            z-index: 5;
+            background: transparent;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            transform: none !important;
+            transition: none !important;
+            animation: none !important;
+        }
+        
+        /* Ensure the button itself is stable */
+        .stable-button-container .btn {
+            position: relative;
+            transform: none !important;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        /* Country hover effect */
+        .country {
+            transition: all 0.3s ease;
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 0.5px;
+        }
+        
+        .country:hover {
+            stroke: #fff;
+            stroke-width: 1.5px;
+            filter: brightness(1.2);
+            cursor: pointer;
+        }
+        
+        body.dark-mode .country {
+            stroke: rgba(0, 0, 0, 0.5);
+        }
+        
+        body.dark-mode .country:hover {
+            stroke: #333;
+        }
     </style>
 </head>
 <body>
@@ -2539,10 +2852,17 @@
         </div>
         
         <div class="container py-4" id="section1">
-            <div class="content-card">
-                <h1 class="text-center mb-4">Hello world by ddd</h1>
-                <p>This website was launched on June 2, 2022.</p>
-                <p>You are watching the update for [firstwebsideofdunc] v0.8 update at 25-11-2024 00:00</p>
+            <div class="content-card welcome-card">
+                <div class="row align-items-center">
+                    <div class="col-md-8 mx-auto text-center">
+                        <div class="welcome-icon mb-4">
+                            <i class="fas fa-globe fa-3x text-primary animated-pulse"></i>
+                        </div>
+                        <h1 class="text-center mb-3 welcome-title">Hello world by <span class="text-primary">ddd</span></h1>
+                        <div class="welcome-divider mb-4"></div>
+                        <p class="lead welcome-text">This website was launched on <span class="text-primary fw-bold">June 2, 2022</span>.</p>
+                        <p class="welcome-version">You are watching the update for <span class="badge bg-primary">[firstwebsideofdunc]</span> v0.8 update at 28-02-2025 00:00</p>
+                </div>
             </div>
 
             <div class="content-card">
@@ -2606,7 +2926,7 @@
                     </div>
                     </div>
                     
-                    <div class="text-center mt-4">
+                    <div class="text-center mt-4 stable-button-container">
                         <button type="submit" class="btn btn-lg btn-primary px-5 pulse-button">
                             <i class="fas fa-paper-plane me-2"></i>Submit Your Vote
                         </button>
@@ -2707,6 +3027,8 @@
                 <div class="map-toolbar mb-3">
                     <div class="map-search">
                         <input type="text" id="countrySearch" class="form-control" placeholder="Search for a country...">
+                        <i class="fas fa-search search-icon"></i>
+                        <i class="fas fa-times clear-icon" id="clearSearch" style="display: none;" onclick="document.getElementById('countrySearch').value = ''; document.getElementById('searchResults').style.display = 'none'; this.style.display = 'none'; document.getElementById('countrySearch').focus();"></i>
                         <div id="searchResults" class="search-results"></div>
                     </div>
                     <div class="map-controls">
@@ -3360,7 +3682,6 @@
                     <p class="mb-2 text-light opacity-75">&copy; 2022-2024 firstwebsideofdunc. All rights reserved.</p>
                     <div class="d-flex align-items-center justify-content-center justify-content-md-end">
                         <span class="text-light opacity-75 me-2">Made with <i class="fas fa-heart text-danger"></i> by DunDD</span>
-                        <span class="version-pill">v0.8</span>
                     </div>
                 </div>
             </div>
@@ -3680,7 +4001,7 @@
         });
 
         // Add Bing Chiling form handling
-        document.getEFlementById('bingchilingForm').addEventListener('submit', function(e) {
+        document.getElementById('bingchilingForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const selected = document.querySelector('input[name="bingchilling"]:checked');
             if (!selected) {
@@ -3884,6 +4205,11 @@
             updateActiveLink();
         });
 
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -3970,6 +4296,11 @@
 
         // 新增 Bing Chiling 特效
         function addBingChilingEffect() {
+            // Disable the 3D effect completely to make the button more stable
+            // This function is intentionally left empty to disable the effect
+            
+            // The original code has been commented out:
+            /*
             const bingchilingCard = document.querySelector('#bingchilingCard');
             
             // 添加懸浮特效
@@ -3989,6 +4320,7 @@
             bingchilingCard.addEventListener('mouseleave', () => {
                 bingchilingCard.style.transform = 'none';
             });
+            */
         }
 
         // 初始化特效
@@ -4137,218 +4469,264 @@ searchInput.addEventListener('focus', () => {
             'CHN': {
         name: 'China',
         color: '#4b9dff',
-        details: 'Home of Bing Chiling! Social Credit Score: +100'
+        details: 'Home of Bing Chiling! Social Credit Score: +100',
+        continent: 'Asia'
     },
     'HKG': {
         name: 'Hong Kong',
         color: '#4b9dff',
         details: '2005-2022',
-        type: 'special'
+        type: 'special',
+        continent: 'Asia'
     },
     'ESP': {
         name: 'Spain',
         color: '#4b9dff',
         details: '2024',
+        continent: 'Europe'
     },
     'MAC': {
         name: 'Macau',
         color: '#4b9dff',
         details: '200x',
-        type: 'special'
+        type: 'special',
+        continent: 'Asia'
     },
     'TWN': {
         name: 'Taiwan',
         color: '#4b9dff',
-        details: '2018'
+        details: '2018',
+        continent: 'Asia'
     },
     'SGP': {
         name: 'Singapore',
         color: '#4b9dff',
-        details: '2012'
+        details: '2012',
+        continent: 'Asia'
     },
     'MYS': {
         name: 'Malaysia',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Asia'
     },
     'BRN': {
         name: 'Brunei',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Asia'
     },
     'IDN': {
         name: 'Indonesia',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Asia'
     },
     'JPN': {
         name: 'Japan',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Asia'
     },
     'KOR': {
         name: 'South Korea',
         color: '#4b9dff',
-        details: '2011'
+        details: '2011',
+        continent: 'Asia'
     },
     'MDV': {
         name: 'Maldives',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Asia'
     },
     'QAT': {
         name: 'Qatar',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Asia'
     },
     'ARE': {
         name: 'United Arab Emirates',
         color: '#4b9dff',
-        details: '2018'
+        details: '2018',
+        continent: 'Asia'
     },
     'RUS': {
         name: 'Russia',
         color: '#4b9dff',
-        details: '2018'
+        details: '2018',
+        continent: 'Europe'
     },
     'CHE': {
         name: 'Switzerland',
         color: '#4b9dff',
-        details: '2018'
+        details: '2018',
+        continent: 'Europe'
     },
     'LIE': {
         name: 'Liechtenstein',
         color: '#4b9dff',
-        details: '2018'
+        details: '2018',
+        continent: 'Europe'
     },
     'AUT': {
         name: 'Austria',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'DEU': {
         name: 'Germany',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'SVN': {
         name: 'Slovenia',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'CZE': {
         name: 'Czech Republic',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'HUN': {
         name: 'Hungary',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'SVK': {
         name: 'Slovakia',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'HRV': {
         name: 'Croatia',
         color: '#4b9dff',
-        details: '2017'
+        details: '2017',
+        continent: 'Europe'
     },
     'POL': {
         name: 'Poland',
         color: '#4b9dff',
-        details: '2024'    },
+        details: '2024',
+        continent: 'Europe'
+    },
     'SWE': {
         name: 'Sweden',
         color: '#4b9dff',
-        details: '2016'    },
+        details: '2016',
+        continent: 'Europe'
+    },
     'FIN': {
         name: 'Finland',
         color: '#4b9dff',
-        details: '2016'
+        details: '2016',
+        continent: 'Europe'
     },
     'DNK': {
         name: 'Denmark',
         color: '#4b9dff',
-        details: '2016'    },
+        details: '2016',
+        continent: 'Europe'
+    },
     'NOR': {
         name: 'Norway',
         color: '#4b9dff',
-     details: '2016'
+        details: '2016',
+        continent: 'Europe'
     },
     'LTU': {
         name: 'Lithuania',
         color: '#4b9dff',
-     details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'LVA': {
         name: 'Latvia',
         color: '#4b9dff',
-     details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'EST': {
         name: 'Estonia',
         color: '#4b9dff',
-        details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'GRC': {
         name: 'Greece',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'Europe'
     },
     'ENG': {
         name: 'England',
         color: '#4b9dff',
-        details: '2022'
+        details: '2022',
+        continent: 'Europe'
     },
     'WLS': {
         name: 'Wales',
         color: '#4b9dff',
-        details: '2023'
+        details: '2023',
+        continent: 'Europe'
     },
     'SCT': {
         name: 'Scotland',
         color: '#4b9dff',
-        details: '2023'
+        details: '2023',
+        continent: 'Europe'
     },
     'IRL': {
         name: 'Ireland',
         color: '#4b9dff',
-        details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'BEL': {
         name: 'Belgium',
         color: '#4b9dff',
-        details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'FRA': {
         name: 'France',
         color: '#4b9dff',
-        details: '2024'
+        details: '2024',
+        continent: 'Europe'
     },
     'JEY': {
         name: 'Jersey',
         color: '#4b9dff',
         details: '2024',
-        type: 'special'
+        type: 'special',
+        continent: 'Europe'
     },
     'GIB': {
         name: 'Gibraltar',
         color: '#4b9dff',
         details: '2024',
-        type: 'special'
+        type: 'special',
+        continent: 'Europe'
     },
     'CAN': {
         name: 'Canada',
         color: '#4b9dff',
-        details: '2019'
+        details: '2019',
+        continent: 'North America'
     },
     'GBR': {
         name: 'United Kingdom',
         color: '#4b9dff',
-        details: '2022'
+        details: '2022',
+        continent: 'Europe'
     }
 };
 
@@ -4375,8 +4753,30 @@ searchInput.addEventListener('focus', () => {
                     .attr('class', 'country')
                     .attr('id', d => `country-${d.id}`)
                     .style('fill', d => highlightedCountries[d.id]?.color || '#e0e0e0')
-                    .on('mouseover', showCountryInfo)
-                    .on('mouseout', hideCountryInfo);
+                    .on('mouseover', function(event, d) {
+                        if (highlightedCountries[d.id]) {
+                            d3.select(this)
+                                .style('filter', 'brightness(1.2)')
+                                .style('stroke-width', '1.5px');
+                                
+                            // Show enhanced tooltip
+                            showEnhancedTooltip(event, d);
+                        }
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .style('filter', 'none')
+                            .style('stroke-width', '0.5px');
+                            
+                        // Remove tooltip on mouseout
+                        const tooltip = document.querySelector('.country-tooltip');
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
+                    })
+                    .on('click', function(event, d) {
+                        showCountryInfo(d.id);
+                    });
 
                 // 添加特殊行政區（使用圓點標記）
                 const specialRegions = Object.entries(highlightedCountries)
@@ -4398,8 +4798,66 @@ searchInput.addEventListener('focus', () => {
                     .style('fill', d => d.color)
                     .style('stroke', '#fff')
                     .style('stroke-width', 1)
-                    .on('mouseover', showSpecialRegionInfo)
-                    .on('mouseout', hideCountryInfo);
+                    .on('mouseover', function(event, d) {
+                        // Show enhanced tooltip for special regions
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'country-tooltip';
+                        
+                        // Create tooltip content
+                        let tooltipContent = `<div class="tooltip-title">${d.name}</div>`;
+                        
+                        // Add special region type
+                        tooltipContent += `<div class="tooltip-detail"><i class="fas fa-map-marker-alt text-primary"></i> Special Region</div>`;
+                        
+                        // Add details if available
+                        if (d.details) {
+                            tooltipContent += `<div class="tooltip-detail"><i class="fas fa-calendar-check"></i> ${d.details}</div>`;
+                        }
+                        
+                        tooltip.innerHTML = tooltipContent;
+                        
+                        // Position the tooltip near the mouse cursor
+                        const mapContainer = document.querySelector('.map-container');
+                        const rect = mapContainer.getBoundingClientRect();
+                        const mouseX = event.clientX - rect.left;
+                        const mouseY = event.clientY - rect.top;
+                        
+                        tooltip.style.left = `${mouseX}px`;
+                        tooltip.style.top = `${mouseY - 10}px`; // Position above cursor
+                        
+                        // Remove any existing tooltips
+                        const existingTooltip = document.querySelector('.country-tooltip');
+                        if (existingTooltip) {
+                            existingTooltip.remove();
+                        }
+                        
+                        // Add the tooltip to the map container
+                        mapContainer.appendChild(tooltip);
+                        
+                        // Adjust position if tooltip goes off the container
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        const containerRect = mapContainer.getBoundingClientRect();
+                        
+                        if (tooltipRect.right > containerRect.right) {
+                            tooltip.style.left = `${mouseX - (tooltipRect.right - containerRect.right) - 10}px`;
+                        }
+                        
+                        if (tooltipRect.left < containerRect.left) {
+                            tooltip.style.left = `${containerRect.left + 10}px`;
+                        }
+                        
+                        if (tooltipRect.top < containerRect.top) {
+                            tooltip.style.top = `${mouseY + 20}px`; // Position below cursor if not enough space above
+                            tooltip.style.transformOrigin = 'top center';
+                        }
+                    })
+                    .on('mouseout', function() {
+                        // Remove tooltip on mouseout
+                        const tooltip = document.querySelector('.country-tooltip');
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
+                    });
 
             } catch (error) {
                 console.error('Error loading map:', error);
@@ -4437,6 +4895,7 @@ searchInput.addEventListener('focus', () => {
             document.getElementById('countryInfo').style.display = 'none';
         }
 
+        // Get UI elements with null checks
         const settingsToggle = document.getElementById('settingsToggle');
         const settingsPanel = document.getElementById('settingsPanel');
         const themeSelect = document.getElementById('themeSelect');
@@ -4444,54 +4903,54 @@ searchInput.addEventListener('focus', () => {
         const zoomControl = document.getElementById('zoomControl');
         const fontSizeControl = document.getElementById('fontSizeControl');
 
-        settingsToggle.addEventListener('click', () => {
-            if (settingsPanel.classList.contains('show')) {
-                settingsPanel.classList.remove('show');
-                settingsPanel.classList.add('hide');
-                setTimeout(() => settingsPanel.style.display = 'none', 300);
-            } else {
-                settingsPanel.style.display = 'flex';
-                settingsPanel.classList.remove('hide');
-                settingsPanel.classList.add('show');
-            }
-        });
+        // Only add event listeners if elements exist
+        if (settingsToggle && settingsPanel) {
+            settingsToggle.addEventListener('click', () => {
+                if (settingsPanel.classList.contains('show')) {
+                    settingsPanel.classList.remove('show');
+                    settingsPanel.classList.add('hide');
+                    setTimeout(() => settingsPanel.style.display = 'none', 300);
+                } else {
+                    settingsPanel.style.display = 'flex';
+                    settingsPanel.classList.remove('hide');
+                    settingsPanel.classList.add('show');
+                }
+            });
+        }
 
-        themeSelect.addEventListener('change', (e) => {
-            const theme = e.target.value;
-            localStorage.setItem('theme', theme);
-            if (theme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        });
+        if (themeSelect) {
+            themeSelect.addEventListener('change', (e) => {
+                const theme = e.target.value;
+                localStorage.setItem('theme', theme);
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            });
+        }
 
-        darkModeToggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        });
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            });
+        }
 
-        zoomControl.addEventListener('input', (e) => {
-            document.body.style.zoom = e.target.value + '%';
-        });
-        darkModeToggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-        });
+        if (zoomControl) {
+            zoomControl.addEventListener('input', (e) => {
+                document.body.style.zoom = e.target.value + '%';
+            });
+        }
 
-        zoomControl.addEventListener('input', (e) => {
-            document.body.style.zoom = e.target.value + '%';
-        });
-
-        fontSizeControl.addEventListener('input', (e) => {
-            document.documentElement.style.fontSize = e.target.value + 'px';
-        });
+        if (fontSizeControl) {
+            fontSizeControl.addEventListener('input', (e) => {
+                document.documentElement.style.fontSize = e.target.value + 'px';
+            });
+        }
 
         // Load saved settings
         document.addEventListener('DOMContentLoaded', () => {
@@ -4609,13 +5068,7 @@ searchInput.addEventListener('focus', () => {
             }
         }
 
-        // Smooth section transitions
-        const observerOptions = {
-            root: null,
-            threshold: 0.1,
-            rootMargin: '0px'
-        };
-
+        // Using the previously defined observerOptions for section transitions
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -4700,12 +5153,21 @@ searchInput.addEventListener('focus', () => {
                             d3.select(this)
                                 .style('filter', 'brightness(1.2)')
                                 .style('stroke-width', '1.5px');
+                                
+                            // Show enhanced tooltip
+                            showEnhancedTooltip(event, d);
                         }
                     })
                     .on('mouseout', function() {
                         d3.select(this)
                             .style('filter', 'none')
                             .style('stroke-width', '0.5px');
+                            
+                        // Remove tooltip on mouseout
+                        const tooltip = document.querySelector('.country-tooltip');
+                        if (tooltip) {
+                            tooltip.remove();
+                        }
                     });
 
                 // Make the map draggable
@@ -4753,9 +5215,13 @@ searchInput.addEventListener('focus', () => {
                 // Initialize country search
                 const countrySearch = document.getElementById('countrySearch');
                 const searchResults = document.getElementById('searchResults');
+                const clearSearch = document.getElementById('clearSearch');
                 
+                // Show/hide clear button based on input content
                 countrySearch.addEventListener('input', function() {
                     const query = this.value.toLowerCase().trim();
+                    clearSearch.style.display = query.length > 0 ? 'block' : 'none';
+                    
                     if (query.length < 2) {
                         searchResults.style.display = 'none';
                         return;
@@ -4763,10 +5229,12 @@ searchInput.addEventListener('focus', () => {
                     
                     const filteredCountries = Object.entries(highlightedCountries)
                         .filter(([_, info]) => info.name.toLowerCase().includes(query))
-                        .map(([id, info]) => ({ id, name: info.name }));
+                        .map(([id, info]) => ({ id, name: info.name }))
+                        .sort((a, b) => a.name.localeCompare(b.name));
                     
                     if (filteredCountries.length === 0) {
-                        searchResults.style.display = 'none';
+                        searchResults.innerHTML = '<div class="search-result-item">No countries found</div>';
+                        searchResults.style.display = 'block';
                         return;
                     }
                     
@@ -4784,6 +5252,47 @@ searchInput.addEventListener('focus', () => {
                     });
                     
                     searchResults.style.display = 'block';
+                });
+                
+                // Add keyboard navigation for search results
+                countrySearch.addEventListener('keydown', function(e) {
+                    if (searchResults.style.display !== 'block') return;
+                    
+                    const items = searchResults.querySelectorAll('.search-result-item');
+                    if (items.length === 0) return;
+                    
+                    const current = searchResults.querySelector('.search-result-item.active');
+                    let index = -1;
+                    
+                    if (current) {
+                        index = Array.from(items).indexOf(current);
+                    }
+                    
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (index < items.length - 1) {
+                            if (current) current.classList.remove('active');
+                            items[index + 1].classList.add('active');
+                            items[index + 1].scrollIntoView({ block: 'nearest' });
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (index > 0) {
+                            if (current) current.classList.remove('active');
+                            items[index - 1].classList.add('active');
+                            items[index - 1].scrollIntoView({ block: 'nearest' });
+                        }
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (current && current.textContent !== 'No countries found') {
+                            current.click();
+                        } else if (items.length === 1 && items[0].textContent !== 'No countries found') {
+                            items[0].click();
+                        }
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        searchResults.style.display = 'none';
+                    }
                 });
                 
                 // Close search results when clicking elsewhere
@@ -4842,7 +5351,14 @@ searchInput.addEventListener('focus', () => {
             
             // Highlight country on map
             d3.selectAll('.country').style('filter', 'brightness(0.8)');
-            d3.select(`#country-${countryId}`).style('filter', 'brightness(1.3)');
+            const countryElement = d3.select(`#country-${countryId}`);
+            countryElement.style('filter', 'brightness(1.3)');
+            
+            // Scroll to the country on the map if it's not visible
+            const countryNode = countryElement.node();
+            if (countryNode) {
+                countryNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
 
         // Close info panel
@@ -4891,22 +5407,22 @@ searchInput.addEventListener('focus', () => {
 
         // Update map statistics
         function updateMapStats() {
-            // Count visited countries
+            // Count visited countries (all countries except those marked as special)
             const visitedCountries = Object.values(highlightedCountries)
-                .filter(country => country.type === 'visited').length;
+                .filter(country => country.type !== 'special').length;
             document.getElementById('countriesCount').textContent = visitedCountries;
             
             // Count continents
             const visitedContinents = new Set();
             Object.values(highlightedCountries)
-                .filter(country => country.type === 'visited')
+                .filter(country => country.type !== 'special')
                 .forEach(country => {
                     if (country.continent) visitedContinents.add(country.continent);
                 });
             document.getElementById('continentsCount').textContent = visitedContinents.size;
             
             // Set flights count (placeholder - you can update this with actual data)
-            document.getElementById('flightsCount').textContent = '12';
+            document.getElementById('flightsCount').textContent = '59';
         }
 
         // Add Dark Mode Toggle
@@ -5003,9 +5519,113 @@ searchInput.addEventListener('focus', () => {
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+
+        // Function to show enhanced tooltip with country details
+        function showEnhancedTooltip(event, d) {
+            const countryData = highlightedCountries[d.id];
+            if (!countryData) return;
+            
+            // Remove any existing tooltips
+            const existingTooltip = document.querySelector('.country-tooltip');
+            if (existingTooltip) {
+                existingTooltip.remove();
+            }
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'country-tooltip';
+            
+            // Get the appropriate flag emoji based on country code
+            let flagEmoji = getFlagEmoji(d.id);
+            
+            // Create tooltip content with detailed information
+            let tooltipContent = `<div class="tooltip-title">${flagEmoji} ${countryData.name}</div>`;
+            
+            // Add visit status
+            if (countryData.type === 'visited') {
+                tooltipContent += `<div class="tooltip-detail"><i class="fas fa-check-circle text-success"></i> Visited</div>`;
+            } else if (countryData.type === 'planned') {
+                tooltipContent += `<div class="tooltip-detail"><i class="fas fa-calendar text-warning"></i> Planned visit</div>`;
+            }
+            
+            // Add continent if available
+            if (countryData.continent) {
+                tooltipContent += `<div class="tooltip-detail"><i class="fas fa-globe"></i> Continent: ${countryData.continent}</div>`;
+            }
+            
+            // Add visit date/details
+            if (countryData.details) {
+                tooltipContent += `<div class="tooltip-detail"><i class="fas fa-calendar-check"></i> ${countryData.details}</div>`;
+            }
+            
+            tooltip.innerHTML = tooltipContent;
+            
+            // Position the tooltip near the mouse cursor
+            const mapContainer = document.querySelector('.map-container');
+            const rect = mapContainer.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+            
+            tooltip.style.left = `${mouseX}px`;
+            tooltip.style.top = `${mouseY - 10}px`; // Position above cursor
+            
+            // Add the tooltip to the map container
+            mapContainer.appendChild(tooltip);
+            
+            // Adjust position if tooltip goes off the container
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const containerRect = mapContainer.getBoundingClientRect();
+            
+            if (tooltipRect.right > containerRect.right) {
+                tooltip.style.left = `${mouseX - (tooltipRect.right - containerRect.right) - 10}px`;
+            }
+            
+            if (tooltipRect.left < containerRect.left) {
+                tooltip.style.left = `${containerRect.left + 10}px`;
+            }
+            
+            if (tooltipRect.top < containerRect.top) {
+                tooltip.style.top = `${mouseY + 20}px`; // Position below cursor if not enough space above
+                tooltip.style.transformOrigin = 'top center';
+            }
+        }
+        
+        // Fix map position when scrolling
+        window.addEventListener('load', function() {
+            const mapContainer = document.querySelector('.map-container');
+            const mapWrapper = document.querySelector('.map-wrapper');
+            
+            if (!mapContainer || !mapWrapper) return;
+            
+            // Store original position
+            const originalRect = mapContainer.getBoundingClientRect();
+            const originalTop = originalRect.top + window.scrollY;
+            
+            window.addEventListener('scroll', function() {
+                // Check if map is in viewport
+                const containerRect = mapContainer.getBoundingClientRect();
+                const isVisible = 
+                    containerRect.top < window.innerHeight && 
+                    containerRect.bottom > 0;
+                
+                if (isVisible) {
+                    // Calculate how much of the map is visible
+                    const visibleHeight = Math.min(containerRect.bottom, window.innerHeight) - 
+                                         Math.max(containerRect.top, 0);
+                    
+                    // Only fix position if most of the map is visible
+                    if (visibleHeight > containerRect.height * 0.5) {
+                        mapWrapper.classList.add('map-fixed');
+                    } else {
+                        mapWrapper.classList.remove('map-fixed');
+                    }
+                } else {
+                    mapWrapper.classList.remove('map-fixed');
+                }
+            });
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" defer></script>
+    <script src="js/popper.min.js" defer></script>
+    <script src="js/bootstrap.min.js" defer></script>
 
     <!-- Replace the showSettings function in your existing script -->
     <script>
