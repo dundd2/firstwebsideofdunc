@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DunDD Fun Facts QC</title>
     <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../css/all.min.css">
     <style>
         :root {
             --primary-color: #2196F3;
+            --primary-hover: #1976D2;
+            --secondary-color: #FF9800;
             --correct-color: #4CAF50;
             --wrong-color: #f44336;
             --card-bg: white;
@@ -15,11 +18,14 @@
             --footer-light: #F7F8F9;
             --footer-dark: #2a2a2a;
             --transition-speed: 0.3s;
+            --card-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            --header-bg: rgba(255,255,255,0.9);
         }
 
         body.dark-mode {
             --card-bg: #1a1a1a;
             --text-color: white;
+            --header-bg: rgba(18,18,18,0.9);
             background: #121212;
         }
 
@@ -29,16 +35,23 @@
         }
 
         body {
-            font-family: '微軟正黑體', sans-serif;
+            font-family: '微軟正黑體', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background: #f0f2f5;
             color: var(--text-color);
         }
 
         .header {
+            position: sticky;
+            top: 0;
             text-align: center;
+            padding: 1rem;
             margin-bottom: 2rem;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .score-container {
@@ -46,42 +59,89 @@
             top: 20px;
             right: 20px;
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: var(--card-shadow);
             z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .score-container i {
+            color: var(--secondary-color);
         }
 
         .question-card {
             background: var(--card-bg);
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .question-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .options {
             display: grid;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .option-btn {
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: 2px solid var(--primary-color);
-            border-radius: 8px;
+            border-radius: 10px;
             background: transparent;
             color: var(--text-color);
             cursor: pointer;
             text-align: left;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(33, 150, 243, 0.1);
+            transition: width 0.3s ease;
+            z-index: -1;
         }
 
         .option-btn:hover {
             background: var(--primary-color);
             color: white;
+            transform: translateX(5px);
+        }
+
+        .option-btn:hover::before {
+            width: 100%;
         }
 
         .option-btn.correct {
@@ -97,20 +157,24 @@
         }
 
         .answer-feedback {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
             display: none;
+            font-weight: bold;
+            text-align: center;
         }
 
         .correct-feedback {
             background: rgba(76, 175, 80, 0.1);
             color: var(--correct-color);
+            border-left: 4px solid var(--correct-color);
         }
 
         .wrong-feedback {
             background: rgba(244, 67, 54, 0.1);
             color: var(--wrong-color);
+            border-left: 4px solid var(--wrong-color);
             animation: slide-in 0.3s ease-out;
         }
 
@@ -118,15 +182,25 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 10px;
+            padding: 15px;
             border-radius: 50%;
             border: none;
             background: var(--primary-color);
             color: white;
             cursor: pointer;
-            width: 50px;
-            height: 50px;
-            font-size: 20px;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #darkModeToggle:hover {
+            background: var(--primary-hover);
+            transform: scale(1.1);
         }
 
         .firework {
@@ -140,20 +214,25 @@
             100% { transform: translateY(1000px) rotateZ(720deg); opacity: 0; }
         }
 
-        /* 新增樣式 */
         .next-btn {
             display: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 8px;
-            margin-top: 15px;
+            border-radius: 50px;
+            margin-top: 20px;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
         }
 
         .next-btn:hover {
-            background: #1976D2;
+            background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(33, 150, 243, 0.4);
         }
 
         .win-animation {
@@ -166,7 +245,7 @@
 
         @keyframes win-pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
@@ -181,15 +260,20 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .logo-container img {
             width: 42px;
             height: 50px;
+            animation: float 3s ease-in-out infinite;
         }
 
-        /* 新增錯誤效果樣式 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .shake-effect {
             animation: shake 0.5s ease-in-out;
         }
@@ -216,23 +300,21 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* 新增 AI 頁面的頁尾樣式 */
         footer {
-            margin-top: 2rem;
-            padding: 20px;
+            margin-top: 3rem;
+            padding: 30px;
             background-color: var(--footer-light);
             transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
         body.dark-mode footer {
             background-color: var(--footer-dark);
-            color: var(--text-dark);
+            color: white;
         }
 
         .footer-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -241,19 +323,20 @@
             color: inherit;
         }
 
-        body.dark-mode .footer-text {
-            color: var(--text-dark);
-        }
-
         .row {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .footer {
             text-align: left;
             padding: 0px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .col-md-6 {
@@ -263,16 +346,15 @@
 
         .footer-bottom {
             text-align: center;
-            margin-top: 1rem;
-            color: var(--text-light);
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
         }
 
-        body.dark-mode .footer-bottom,
-        body.dark-mode .col-md-6 p {
-            color: var(--text-dark);
+        body.dark-mode .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 新增進度條樣式 */
         .progress-container {
             position: fixed;
             top: 70px;
@@ -280,7 +362,7 @@
             background: var(--card-bg);
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
             z-index: 100;
         }
 
@@ -299,29 +381,75 @@
             transition: width 0.3s ease;
         }
 
-        /* 結束畫面樣式 */
         .end-screen {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
         }
 
         .end-screen h2 {
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
         }
 
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
+            gap: 30px;
+            margin: 30px 0;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .question-card {
+                padding: 20px;
+                margin: 0 15px 20px;
+            }
+            
+            .score-container, .progress-container {
+                position: static;
+                margin: 10px auto;
+                width: fit-content;
+            }
+            
+            .progress-container {
+                margin-bottom: 20px;
+            }
+            
+            .header {
+                position: relative;
+                margin-bottom: 1rem;
+            }
+            
+            #darkModeToggle {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -331,11 +459,11 @@
             <img src="../img/patch.png" alt="DunDD logo">
             <h1>DunDD Fun Facts Quiz</h1>
         </div>
-        <p>This page start with [firstwebsideofdunc] update v0.7</p>
+        <p><i class="fas fa-info-circle"></i> This page start with [firstwebsideofdunc] update v0.7</p>
     </div>
 
     <div class="score-container">
-        Score: <span id="score">0</span>
+        <i class="fas fa-star"></i> Score: <span id="score">0</span>
     </div>
 
     <div class="progress-container">
@@ -343,12 +471,12 @@
             <div class="progress-fill"></div>
         </div>
         <div style="text-align: center; margin-top: 5px;">
-            Progress: <span id="questionProgress">1</span>/<span id="totalQuestions">0</span>
+            <i class="fas fa-tasks"></i> Progress: <span id="questionProgress">1</span>/<span id="totalQuestions">0</span>
         </div>
     </div>
 
     <div id="questionsContainer"></div>
-    <button id="darkModeToggle">🌙</button>
+    <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
 
     <!-- 新增頁尾 -->
     <footer>
@@ -358,16 +486,16 @@
                     <a href="../index.html">
                         <img src="../img/patch.png" alt="vbeta" width="42" height="50">
                     </a>
-                    <h4>Go back to [firstwebsideofdunc] main page</h4>
+                    <h4><i class="fas fa-home"></i> Go back to [firstwebsideofdunc] main page</h4>
                 </div>
                 <div class="col-md-6">
                     <b>
-                        <p>Thanks for Playing</p>
+                        <p><i class="fas fa-heart"></i> Thanks for Playing</p>
                     </b>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 firstwebsideofdunc. All rights reserved.</p>
+                <p>&copy; 2025 firstwebsideofdunc. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -625,31 +753,30 @@
         "answer": 2
     },
     {
- "question": "dundd 在英國遇到的網路霸凌，是透過什麼方式進行的？",
- "options": ["私訊辱罵", "公開貼文攻擊", "造謠誹謗"],
- "answer": 1
- },
- {
- "question": "dundd 最後是如何處理在英國的網路霸凌的？",
- "options": ["反擊", "無視", "尋求幫助"],
- "answer": 1
- },
- {
- "question": "dundd在Threads上分享的內容，主要是什麼類型的？",
- "options": ["正面正面", "負負面", "中性客觀"],
- "answer": 1 // Mostly negative, though interpretations may vary
- },
-
- {
- "question": "dundd 在英國有沒有學過開車？",
- "options": ["有", "沒有"],
- "answer": 0
- },
- {
- "question": "dundd 的 MBTI 人格類型是什麼？",
- "options": ["INFJ", "ENFJ", "INTJ"],
- "answer": 0
- },
+        "question": "dundd 在英國遇到的網路霸凌，是透過什麼方式進行的？",
+        "options": ["私訊辱罵", "公開貼文攻擊", "造謠誹謗"],
+        "answer": 1
+    },
+    {
+        "question": "dundd 最後是如何處理在英國的網路霸凌的？",
+        "options": ["反擊", "無視", "尋求幫助"],
+        "answer": 1
+    },
+    {
+        "question": "dundd在Threads上分享的內容，主要是什麼類型的？",
+        "options": ["正面正面", "負負面", "中性客觀"],
+        "answer": 1 // Mostly negative, though interpretations may vary
+    },
+    {
+        "question": "dundd 在英國有沒有學過開車？",
+        "options": ["有", "沒有"],
+        "answer": 0
+    },
+    {
+        "question": "dundd 的 MBTI 人格類型是什麼？",
+        "options": ["INFJ", "ENFJ", "INTJ"],
+        "answer": 0
+    },
 ]
         ;
 
@@ -661,17 +788,17 @@
         let shuffledQuestions = [];
 
         const correctMessages = [
-            "Correct! 🎉 You gain 10 points!",
-            "Well done! 👍 +10 points!",
-            "Awesome! 🌟 10 points added!",
-            "Great job! 🏆 10 points for you!"
+            "<i class='fas fa-check-circle'></i> Correct! 🎉 You gain 10 points!",
+            "<i class='fas fa-thumbs-up'></i> Well done! 👍 +10 points!",
+            "<i class='fas fa-award'></i> Awesome! 🌟 10 points added!",
+            "<i class='fas fa-trophy'></i> Great job! 🏆 10 points for you!"
         ];
 
         const wrongMessages = [
-            "Wrong! 😢 You lose 5 points!",
-            "Oops! 😬 -5 points!",
-            "Incorrect! ❌ 5 points deducted!",
-            "Nope! 🚫 Minus 5 points!"
+            "<i class='fas fa-times-circle'></i> Wrong! 😢 You lose 5 points!",
+            "<i class='fas fa-exclamation-triangle'></i> Oops! 😬 -5 points!",
+            "<i class='fas fa-ban'></i> Incorrect! ❌ 5 points deducted!",
+            "<i class='fas fa-thumbs-down'></i> Nope! 🚫 Minus 5 points!"
         ];
 
         function shuffleQuestions() {
@@ -682,15 +809,15 @@
             const card = document.createElement('div');
             card.className = 'question-card';
             card.innerHTML = `
-                <h3>Question ${index + 1}</h3>
+                <h3><i class="fas fa-question-circle"></i> Question ${index + 1}</h3>
                 <p>${question.question}</p>
                 <div class="options">
                     ${question.options.map((opt, i) => `
-                        <button class="option-btn" data-option="${i}">${opt}</button>
+                        <button class="option-btn" data-option="${i}"><span class="option-letter">${String.fromCharCode(65 + i)}.</span> ${opt}</button>
                     `).join('')}
                 </div>
                 <div class="answer-feedback"></div>
-                <button class="next-btn">Next Question</button>
+                <button class="next-btn"><i class="fas fa-arrow-right"></i> Next Question</button>
             `;
             return card;
         }
@@ -711,20 +838,23 @@
             } else {
                 container.innerHTML = `
                     <div class="question-card end-screen">
-                        <h2>Game Over!</h2>
+                        <h2><i class="fas fa-flag-checkered"></i> Quiz Completed!</h2>
                         <div class="stats-container">
                             <div class="stat-card">
-                                <h3>Final Score</h3>
+                                <h3><i class="fas fa-star"></i> Final Score</h3>
                                 <p>${score}</p>
                             </div>
                             <div class="stat-card">
-                                <h3>Accuracy</h3>
+                                <h3><i class="fas fa-chart-pie"></i> Accuracy</h3>
                                 <p>${Math.round((score / (shuffledQuestions.length * 10)) * 100)}%</p>
                             </div>
                         </div>
-                        <button class="next-btn" onclick="restartGame()">Play Again</button>
+                        <button class="next-btn" onclick="restartGame()"><i class="fas fa-redo"></i> Play Again</button>
                     </div>
                 `;
+                
+                // Create celebration effect
+                createFireworks();
             }
         }
 
@@ -739,16 +869,19 @@
             
             if (optionIndex === question.answer) {
                 buttons[optionIndex].classList.add('correct');
+                buttons[optionIndex].innerHTML += ' <i class="fas fa-check"></i>';
                 feedback.className = 'answer-feedback correct-feedback';
-                feedback.textContent = correctMessages[Math.floor(Math.random() * correctMessages.length)];
+                feedback.innerHTML = correctMessages[Math.floor(Math.random() * correctMessages.length)];
                 score += 10;
                 createFireworks();
                 card.classList.add('win-animation');
             } else {
                 buttons[optionIndex].classList.add('wrong');
+                buttons[optionIndex].innerHTML += ' <i class="fas fa-times"></i>';
                 buttons[question.answer].classList.add('correct');
+                buttons[question.answer].innerHTML += ' <i class="fas fa-check"></i>';
                 feedback.className = 'answer-feedback wrong-feedback';
-                feedback.textContent = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
+                feedback.innerHTML = wrongMessages[Math.floor(Math.random() * wrongMessages.length)];
                 
                 // 新增錯誤效果
                 card.classList.add('shake-effect', 'flash-effect');
@@ -817,7 +950,8 @@
         const darkModeToggle = document.getElementById('darkModeToggle');
         darkModeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
-            darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            darkModeToggle.innerHTML = document.body.classList.contains('dark-mode') ? 
+                '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         });
 
         // 事件監聽器
@@ -825,7 +959,7 @@
             if (e.target.classList.contains('option-btn') && !e.target.disabled) {
                 const optionIndex = parseInt(e.target.dataset.option);
                 handleAnswer(optionIndex);
-            } else if (e.target.classList.contains('next-btn')) {
+            } else if (e.target.classList.contains('next-btn') || e.target.parentElement.classList.contains('next-btn')) {
                 currentQuestionIndex++;
                 showNextQuestion();
             }
