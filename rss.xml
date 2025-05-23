@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>firstwebsideofdunc</title>
+    <link>https://dundd2.github.io/firstwebsideofdunc/</link>
+    <description>Personal website of dunc featuring projects, travel updates, and more</description>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Jun 2024 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://dundd2.github.io/firstwebsideofdunc/rss.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://dundd2.github.io/firstwebsideofdunc/img/patch.png</url>
+      <title>firstwebsideofdunc</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/</link>
+    </image>
+    
+    <item>
+      <title>Website Redesign: Modern UI Updates</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/vbeta.html</link>
+      <pubDate>Mon, 10 Jun 2024 12:00:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/vbeta.html?update=20240610</guid>
+      <description><![CDATA[
+        <h2>Major Website Redesign</h2>
+        <p>I've completely redesigned the website with a modern UI, including:</p>
+        <ul>
+          <li>New interactive world map showing my travels</li>
+          <li>Improved "Bing Chiling" voting system with social credit score</li>
+          <li>Dark mode support for better viewing experience</li>
+          <li>Responsive design for all devices</li>
+          <li>Added Strava integration to track my activities</li>
+        </ul>
+        <p>Check out the new design and let me know what you think!</p>
+        <img src="https://dundd2.github.io/firstwebsideofdunc/img/patch.png" alt="Website Logo" />
+      ]]></description>
+    </item>
+    
+    <item>
+      <title>New Travel: Visited Japan</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/vbeta.html#worldMap</link>
+      <pubDate>Sat, 01 Jun 2024 08:30:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/vbeta.html?travel=japan2024</guid>
+      <description><![CDATA[
+        <h2>Japan Trip 2024</h2>
+        <p>Just returned from an amazing two-week trip to Japan! Visited Tokyo, Kyoto, and Osaka.</p>
+        <p>Highlights included:</p>
+        <ul>
+          <li>Cherry blossom viewing in Kyoto</li>
+          <li>Exploring the bustling streets of Tokyo</li>
+          <li>Trying authentic Japanese cuisine</li>
+          <li>Visiting historic temples and shrines</li>
+        </ul>
+        <p>Check out the updated world map to see all the countries I've visited so far!</p>
+      ]]></description>
+    </item>
+    
+    <item>
+      <title>Added RSS Feed Support</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/rss-subscribe.html</link>
+      <pubDate>Wed, 05 Jun 2024 15:45:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/rss-subscribe.html</guid>
+      <description><![CDATA[
+        <h2>Stay Updated with RSS</h2>
+        <p>I've added RSS feed support to the website! Now you can subscribe and get automatic updates whenever new content is posted.</p>
+        <p>Benefits of using the RSS feed:</p>
+        <ul>
+          <li>Get notified about new content automatically</li>
+          <li>Read updates in your favorite RSS reader</li>
+          <li>Never miss an update</li>
+        </ul>
+        <p>Visit the <a href="https://dundd2.github.io/firstwebsideofdunc/rss-subscribe.html">RSS subscription page</a> to learn how to subscribe.</p>
+      ]]></description>
+    </item>
+    
+    <item>
+      <title>Upcoming Travel Plans: South America</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/vbeta.html#worldMap</link>
+      <pubDate>Tue, 28 May 2024 10:15:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/vbeta.html?travel=southamerica-plans</guid>
+      <description><![CDATA[
+        <h2>Planning Trip to South America</h2>
+        <p>I'm excited to announce my upcoming travel plans to South America later this year!</p>
+        <p>Countries on the itinerary:</p>
+        <ul>
+          <li>Brazil - Rio de Janeiro and the Amazon</li>
+          <li>Argentina - Buenos Aires and Patagonia</li>
+          <li>Peru - Machu Picchu and Lima</li>
+          <li>Chile - Santiago and Torres del Paine</li>
+        </ul>
+        <p>Stay tuned for updates as I prepare for this adventure!</p>
+      ]]></description>
+    </item>
+    
+    <item>
+      <title>New Testimonials Added</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/vbeta.html#section4</link>
+      <pubDate>Mon, 20 May 2024 14:20:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/vbeta.html?update=testimonials-may2024</guid>
+      <description><![CDATA[
+        <h2>New Testimonials from Friends</h2>
+        <p>I've added several new testimonials from friends and colleagues to the website.</p>
+        <p>Thanks to everyone who contributed their kind words! It means a lot to me.</p>
+        <p>Check out the testimonials section to see what people are saying.</p>
+      ]]></description>
+    </item>
+  </channel>
+</rss>

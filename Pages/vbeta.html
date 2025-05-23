@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VBeta Page Moved</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <meta name="description" content="VBeta page has moved to a new location. Click to visit the new page.">
+    <style>
+        :root {
+            --bg-light: #FFF;
+            --text-light: #000;
+            --bg-dark: #1a1a1a;
+            --text-dark: #fff;
+            --primary-color: #2196F3;
+            --primary-hover: #1976D2;
+            --spacing-unit: 1rem;
+            --border-radius: 5px;
+            --transition-speed: 0.3s;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo-container img {
+            width: 42px;
+            height: 50px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo-container img.loaded {
+            opacity: 1;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            transition: background var(--transition-speed);
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            top: 0;
+            left: -100%;
+            transition: left 0.3s ease;
+        }
+
+        .nav-button:hover::after {
+            left: 0;
+        }
+
+        #darkModeToggle {
+            padding: 10px 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            background-color: transparent;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        #darkModeToggle:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        body.dark-mode #darkModeToggle {
+            color: var(--text-dark);
+            border-color: var(--text-dark);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            background-color: #F7F8F9;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode footer {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            border-top-color: rgba(255,255,255,0.1);
+        }
+
+        /* Add standardized styles */
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer {
+            text-align: left;
+            padding: 0px;
+        }
+
+        .col-md-6 {
+            text-align: right;
+            padding: 0px;
+        }
+
+        body.dark-mode .col-md-6 p {
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .footer {
+            width: 100%;
+            padding: 2rem 0;
+        }
+
+        .footer .row {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-bottom {
+            margin-top: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1.5rem;
+        }
+
+        body.dark-mode .footer-bottom {
+            border-top-color: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="darkModeToggle" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+
+        <main class="main-content">
+            <div class="logo-container">
+                <h1>VBeta Page Moved</h1>
+                <img src="../img/patch.png" alt="logo">
+            </div>
+
+            <section>
+                <a href="../vbeta.html" class="nav-button">
+                    <span>VBeta has moved to a new location! Click here to visit.</span>
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="row">
+            <div class="footer-left">
+                <a href="../index.html">
+                    <img src="../img/patch.png" alt="vbeta" width="42" height="50">
+                </a>
+                <h4>Go back to [firstwebsideofdunc] main page</h4>
+            </div>
+            <div class="footer-right">
+                <b>
+                    <p>Thanks for watching</p>
+                </b>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 firstwebsideofdunc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode functionality
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // Image loading
+        const logoImg = document.querySelector('.logo-container img');
+        logoImg.addEventListener('load', () => {
+            logoImg.classList.add('loaded');
+        });
+
+    </script>
+</body>
+</html>

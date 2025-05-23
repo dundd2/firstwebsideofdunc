@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Henshin Game - Firstwebsideofdunc</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="stylesheet" href="../css/all.min.css">
+    <style>
+        :root {
+            --bg-light: #f8f9fa;
+            --text-light: #212529;
+            --bg-dark: #121212;
+            --text-dark: #f8f9fa;
+            --primary-color: #2196F3;
+            --primary-hover: #1976D2;
+            --accent-color: #FF4081;
+            --spacing-unit: 1rem;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.15);
+            --footer-light: #e9ecef;
+            --footer-dark: #1e1e1e;
+            --card-light: #ffffff;
+            --card-dark: #2a2a2a;
+        }
+
+        body {
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #673AB7);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: var(--shadow);
+        }
+
+        body.dark-mode header {
+            background: linear-gradient(135deg, #1565C0, #4527A0);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-container img {
+            width: 50px;
+            height: 60px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            transition: transform 0.3s;
+            object-fit: contain;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .version-tag {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .henshin-container {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--card-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 650px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .henshin-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        body.dark-mode .henshin-container {
+            background: var(--card-dark);
+        }
+
+        .henshin-image {
+            width: 600px;
+            height: 338px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: var(--border-radius);
+        }
+
+        .henshin-image:hover {
+            transform: scale(1.02);
+        }
+
+        .henshin-image:active {
+            transform: scale(0.98);
+        }
+
+        .theme-toggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+        }
+
+        .instruction {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(to right, rgba(33, 150, 243, 0.1), rgba(103, 58, 183, 0.1));
+            border-radius: var(--border-radius);
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-left: 4px solid var(--primary-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            background-color: var(--footer-light);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        body.dark-mode footer {
+            background-color: var(--footer-dark);
+            color: var(--text-dark);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .footer-nav a {
+            color: var(--text-dark);
+        }
+
+        .footer-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-nav img {
+            width: 42px;
+            height: 50px;
+            transition: transform 0.3s;
+            object-fit: contain;
+        }
+
+        .footer-nav a:hover img {
+            transform: scale(1.1);
+        }
+
+        .footer-text {
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            color: var(--text-light);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        body.dark-mode .footer-bottom {
+            color: var(--text-dark);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Loading animation */
+        .loading {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Animation effects */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress bar for animation */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 3px;
+            margin-top: 1rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        body.dark-mode .progress-container {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            transition: width 0.1s linear;
+        }
+
+        /* Animation counter */
+        .counter {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            color: var(--primary-color);
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 0;
+            }
+            
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .henshin-container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+            
+            .henshin-image {
+                width: 100%;
+                height: auto;
+                max-width: 600px;
+            }
+            
+            .theme-toggle {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .instruction {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .footer-nav {
+                justify-content: center;
+            }
+        }
+
+        /* Special effects */
+        .glow {
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(33, 150, 243, 0.5); }
+            to { box-shadow: 0 0 20px rgba(33, 150, 243, 0.8), 0 0 30px rgba(103, 58, 183, 0.5); }
+        }
+
+        /* Animation count badge */
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Henshin! Game</h1>
+                <img src="../img/patch.png" alt="logo" width="42" height="50">
+            </div>
+            <div class="version-tag">v0.04</div>
+        </div>
+        <button class="theme-toggle" onclick="darkMode()">
+            <i class="fas fa-moon"></i> <span class="toggle-text">Dark Mode</span>
+        </button>
+    </header>
+
+    <div class="container fade-in">
+        <div class="instruction">
+            <p><i class="fas fa-hand-pointer"></i> Click the image to start the transformation animation!</p>
+        </div>
+
+        <div class="henshin-container">
+            <div class="badge" id="counter-badge">0</div>
+            <img src="../img/akibaranger henshin.png" id="henshin!" class="henshin-image" alt="Henshin transformation">
+            <div class="progress-container" id="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="counter" id="counter">Transformation in progress...</div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-nav">
+                <a href="../index.html">
+                    <img src="../img/patch.png" alt="vbeta" width="42" height="50">
+                    <span class="footer-text">Back to Main Page</span>
+                </a>
+            </div>
+            <div class="footer-text">
+                <p><i class="fas fa-heart" style="color: var(--accent-color);"></i> Thanks for watching</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 firstwebsideofdunc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function darkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            
+            // Update button text and icon
+            const toggleBtn = document.querySelector('.theme-toggle');
+            const toggleText = toggleBtn.querySelector('.toggle-text');
+            const toggleIcon = toggleBtn.querySelector('i');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                toggleText.textContent = 'Light Mode';
+                toggleIcon.className = 'fas fa-sun';
+            } else {
+                toggleText.textContent = 'Dark Mode';
+                toggleIcon.className = 'fas fa-moon';
+            }
+        }
+
+        window.onload = function() {
+            const img = document.getElementById("henshin!");
+            const audio = new Audio('../img/Henshin Sound.mp3');
+            const progressBar = document.getElementById("progress-bar");
+            const progressContainer = document.getElementById("progress-container");
+            const counterElement = document.getElementById("counter");
+            const counterBadge = document.getElementById("counter-badge");
+            
+            let isAnimating = false;
+            let animationTimeout;
+            let transformationCount = 0;
+            let progressInterval;
+
+            // Add error handling for audio
+            audio.addEventListener('error', (e) => {
+                console.error('Error loading audio:', e);
+                alert('Failed to load audio. Please refresh the page.');
+            });
+
+            function startAnimation() {
+                if (!isAnimating) {
+                    isAnimating = true;
+                    img.src = '../img/henshin!.gif';
+                    img.classList.add('glow');
+                    
+                    // Show progress elements
+                    progressContainer.style.display = 'block';
+                    counterElement.style.display = 'block';
+                    
+                    // Reset progress bar
+                    let progress = 0;
+                    progressBar.style.width = '0%';
+                    
+                    // Update progress bar
+                    progressInterval = setInterval(() => {
+                        progress += 2;
+                        progressBar.style.width = progress + '%';
+                        if (progress >= 100) {
+                            clearInterval(progressInterval);
+                        }
+                    }, 100);
+                    
+                    // Reset audio and play
+                    audio.currentTime = 0;
+                    const playPromise = audio.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.error('Error playing audio:', error);
+                        });
+                    }
+
+                    // Update transformation count
+                    transformationCount++;
+                    counterBadge.textContent = transformationCount;
+
+                    animationTimeout = setTimeout(() => {
+                        img.src = '../img/akibaranger henshin.png';
+                        img.classList.remove('glow');
+                        isAnimating = false;
+                        
+                        // Hide progress elements
+                        progressContainer.style.display = 'none';
+                        counterElement.style.display = 'none';
+                        
+                        clearInterval(progressInterval);
+                    }, 5000);
+
+                    // Add vibration feedback (if device supports it)
+                    if (navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+                }
+            }
+
+            // Clean up on page unload
+            window.addEventListener('unload', () => {
+                if (animationTimeout) {
+                    clearTimeout(animationTimeout);
+                }
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                }
+                audio.pause();
+            });
+
+            // Restore dark mode preference
+            if (localStorage.getItem('darkMode') === 'true' || 
+                window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.toggle-text').textContent = 'Light Mode';
+                document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+            }
+
+            img.addEventListener('click', startAnimation);
+            img.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent default touch behavior
+                startAnimation();
+            });
+
+            // Add loading animation
+            document.querySelector('.container').classList.remove('loading');
+            
+            // Add audio preload
+            audio.preload = 'auto';
+
+            // Error handling
+            img.addEventListener('error', () => {
+                console.error('Image loading failed');
+                alert('Failed to load image. Please refresh the page.');
+            });
+        }
+    </script>
+</body>
+</html>
