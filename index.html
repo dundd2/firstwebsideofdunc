@@ -12,7 +12,10 @@
     <meta property="og:title" content="dunc's Website v0.8">
     <meta property="og:description" content="dunc's personal website showcasing various updates and content.">
     <meta property="og:type" content="website">
-    
+    <meta name="theme-color" content="#f3f5fb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <!-- Preload critical resources -->
     <link rel="preload" href="img/patch.png" as="image">
     <link rel="preload" href="img/bingchiling.png" as="image">
@@ -20,11 +23,13 @@
     
     <!-- Font Awesome - Local Version -->
     <link rel="stylesheet" href="css/fontawesome.min.css">
-    
+
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/patch.png">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for firstwebsideofdunc" href="rss.xml">
     <script src="js/d3.v7.min.js" defer></script>
     <script src="js/topojson.min.js" defer></script>
@@ -4759,6 +4764,66 @@
                 </div>
             </div>
         </div>
+
+        <section id="updates" class="py-5">
+            <div class="container">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-6">
+                        <div class="content-card h-100 p-4 p-md-5">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                                    <i class="fas fa-rss fa-lg text-primary"></i>
+                                </div>
+                                <div>
+                                    <span class="badge bg-primary bg-opacity-25 text-primary fw-semibold">RSS Feed</span>
+                                    <h3 class="h4 mt-2 mb-0">Stay updated automatically</h3>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-4">Subscribe to the firstwebsideofdunc RSS feed to receive the latest travel stories, design notes, and changelog entries directly in your favourite reader.</p>
+                            <ul class="list-unstyled text-muted small mb-4">
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Instant access to new articles and releases</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Works with any modern RSS reader</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Provides full descriptions and imagery</li>
+                            </ul>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="rss.xml" class="btn btn-hero-primary" target="_blank" rel="noopener noreferrer">
+                                    <i class="fas fa-rss me-2"></i>Open feed
+                                </a>
+                                <button type="button" class="btn btn-hero-secondary" onclick="copyRSSFeed()">
+                                    <i class="fas fa-clipboard-list me-2"></i>Copy feed URL
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content-card h-100 p-4 p-md-5">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                                    <i class="fas fa-mobile-alt fa-lg text-success"></i>
+                                </div>
+                                <div>
+                                    <span class="badge bg-success bg-opacity-25 text-success fw-semibold">Progressive Web App</span>
+                                    <h3 class="h4 mt-2 mb-0">Installable &amp; offline ready</h3>
+                                </div>
+                            </div>
+                            <p class="text-muted mb-4">Add firstwebsideofdunc to your home screen for an app-like experience with faster loading and offline access to key content.</p>
+                            <div class="bg-light bg-opacity-50 rounded-4 p-3 mb-4">
+                                <h4 class="h6 text-uppercase text-muted fw-semibold mb-3">Getting started</h4>
+                                <ol class="ps-3 text-muted small mb-0">
+                                    <li>Visit this site in a supported browser (Chrome, Edge, Safari, or Firefox).</li>
+                                    <li>Look for the “Install app” or “Add to Home Screen” option in the browser menu.</li>
+                                    <li>Launch the installed app to enjoy offline-ready navigation.</li>
+                                </ol>
+                            </div>
+                            <button type="button" class="btn btn-hero-secondary" onclick="checkPWACacheStatus()">
+                                <i class="fas fa-signal me-2"></i>Check offline status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <button class="back-to-top" id="backToTopBtn">⬆️</button>
@@ -4767,6 +4832,7 @@
     <!-- Add Floating Action Menu -->
     <div class="floating-menu">
         <div class="floating-action" onclick="showSearch()">🔍</div>
+        <a class="floating-action" href="rss.xml" target="_blank" rel="noopener noreferrer" title="Open RSS feed" aria-label="Open RSS feed">📰</a>
         <div class="floating-action" onclick="shareContent()">📤</div>
         <div class="floating-action" onclick="showSettings()">⚙️</div>
     </div>
@@ -4857,6 +4923,21 @@
     <script>
         const backToTopBtn = document.getElementById('backToTopBtn');
         const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
+        const themeMetaTag = document.querySelector('meta[name="theme-color"]');
+        const darkThemeClasses = ['dark-mode', 'theme-terminal', 'theme-neon', 'theme-space', 'theme-synthwave', 'theme-cyberpunk'];
+
+        function updateThemeColor() {
+            if (!themeMetaTag) return;
+            const isDark = darkThemeClasses.some(themeClass => document.body.classList.contains(themeClass));
+            themeMetaTag.setAttribute('content', isDark ? '#060917' : '#f3f5fb');
+        }
+
+        updateThemeColor();
+
+        if (typeof MutationObserver !== 'undefined') {
+            const themeObserver = new MutationObserver(() => updateThemeColor());
+            themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        }
 
         window.addEventListener('scroll', () => {
             if (window.scrollY > 200) {
@@ -4872,6 +4953,7 @@
 
         darkModeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
+            updateThemeColor();
         });
 
         const memeCards = document.querySelectorAll('.meme-card');
@@ -4894,14 +4976,75 @@
                     loadingOverlay.style.display = 'none';
                 }, 100);
             }
-            
+
             // Fix potential image loading issues
             document.querySelectorAll('img').forEach(img => {
                 if (!img.complete) {
                     img.src = img.src;
                 }
             });
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(error => {
+                    console.error('Service worker registration failed:', error);
+                });
+            }
+
+            updateThemeColor();
         });
+
+        async function copyRSSFeed() {
+            const feedURL = new URL('rss.xml', window.location.href).href;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(feedURL);
+                    showToast('RSS feed URL copied to clipboard!', 'success');
+                    return;
+                } catch (error) {
+                    console.error('Clipboard copy failed:', error);
+                }
+            }
+
+            const manualCopy = window.prompt('Copy the RSS feed URL:', feedURL);
+            if (manualCopy !== null) {
+                showToast('RSS feed URL ready to paste.', 'info');
+            }
+        }
+
+        async function checkPWACacheStatus() {
+            const cachePrefix = 'firstwebsideofdunc-pwa';
+
+            if (!('serviceWorker' in navigator)) {
+                showToast('PWA features are not supported in this browser yet.', 'warning');
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (!registration) {
+                    showToast('Service worker not registered yet. Try refreshing the page.', 'warning');
+                    return;
+                }
+
+                if (!('caches' in window)) {
+                    showToast('Service worker registered. Offline cache not available in this browser.', 'info');
+                    return;
+                }
+
+                const cacheNames = await caches.keys();
+                const hasAppCache = cacheNames.some(name => name.startsWith(cachePrefix));
+
+                if (hasAppCache) {
+                    showToast('Offline content is cached and ready!', 'success');
+                } else {
+                    showToast('Service worker registered. Preparing offline cache…', 'info');
+                }
+            } catch (error) {
+                console.error('Unable to verify offline cache status', error);
+                showToast('Unable to verify offline cache status right now.', 'warning');
+            }
+        }
 
         // 改進卡片動畫
         document.querySelectorAll('.content-card').forEach(card => {
@@ -4931,6 +5074,7 @@
                 darkModeToggleBtn.style.transform = 'none';
             }, 500);
             document.body.classList.toggle('dark-mode');
+            updateThemeColor();
         });
 
         // 簡化深色模式切換功能
@@ -4949,6 +5093,7 @@
             setTimeout(() => {
                 darkModeToggleBtn.style.transform = 'none';
             }, 500);
+            updateThemeColor();
         });
 
         // Smooth scroll for navigation links
@@ -7357,8 +7502,9 @@ searchInput.addEventListener('focus', () => {
         } else if (selectedTheme !== 'light') {
             document.body.classList.add(`theme-${selectedTheme}`);
         }
-        
+
         showToast(`Theme changed to ${selectedTheme}`);
+        updateThemeColor();
     }
 
     function handleFontSizeChange(e) {

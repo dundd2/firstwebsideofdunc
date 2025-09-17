@@ -5,7 +5,7 @@
     <link>https://dundd2.github.io/firstwebsideofdunc/</link>
     <description>Personal website of dunc featuring projects, travel updates, and more</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Jun 2024 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 18 Mar 2025 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://dundd2.github.io/firstwebsideofdunc/rss.xml" rel="self" type="application/rss+xml" />
     <image>
       <url>https://dundd2.github.io/firstwebsideofdunc/img/patch.png</url>
@@ -13,6 +13,23 @@
       <link>https://dundd2.github.io/firstwebsideofdunc/</link>
     </image>
     
+    <item>
+      <title>PWA launch &amp; RSS enhancements</title>
+      <link>https://dundd2.github.io/firstwebsideofdunc/index.html#updates</link>
+      <pubDate>Tue, 18 Mar 2025 12:00:00 GMT</pubDate>
+      <guid>https://dundd2.github.io/firstwebsideofdunc/index.html?feature=pwa-rss-20250318</guid>
+      <description><![CDATA[
+        <h2>Installable experience now available</h2>
+        <p>The site now ships as a Progressive Web App, so you can install it on desktop or mobile and browse the latest updates while offline.</p>
+        <ul>
+          <li>Service worker caching for key pages, assets, and the RSS feed</li>
+          <li>Web app manifest with icons, theme color, and quick shortcuts</li>
+          <li>New updates hub with quick links to the RSS feed and offline status check</li>
+        </ul>
+        <p>Use the floating 📰 icon or the updates hub to subscribe to the refreshed RSS feed and stay in sync wherever you read.</p>
+      ]]></description>
+    </item>
+
     <item>
       <title>Website Redesign: Modern UI Updates</title>
       <link>https://dundd2.github.io/firstwebsideofdunc/vbeta.html</link>
