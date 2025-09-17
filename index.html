@@ -941,6 +941,604 @@
             background: var(--dark-card-bg);
         }
 
+        /* Learning Pulse dashboard styles */
+        .skill-chart-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.8));
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .skill-chart-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(20, 20, 20, 0.85));
+            box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+        }
+
+        .skill-chart-container {
+            position: relative;
+            height: 320px;
+        }
+
+        #skillChart {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+        }
+
+        @media (max-width: 768px) {
+            .skill-chart-container {
+                height: 260px;
+            }
+
+            #skillChart {
+                min-height: 220px;
+            }
+        }
+
+        .skill-tooltip {
+            position: absolute;
+            min-width: 190px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.08);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        body.dark-mode .skill-tooltip {
+            background: rgba(25, 25, 25, 0.95);
+            border-color: rgba(255,255,255,0.08);
+            color: var(--dark-text-color);
+        }
+
+        .skill-tooltip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .skill-tooltip-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .skill-tooltip-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-tooltip-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .skill-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .skill-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #495057;
+        }
+
+        body.dark-mode .skill-legend-item {
+            color: var(--dark-text-color);
+        }
+
+        .skill-legend-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .skill-stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(235,245,255,0.85));
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+        }
+
+        body.dark-mode .skill-stat-card {
+            background: linear-gradient(135deg, rgba(32,32,32,0.95), rgba(25,25,25,0.85));
+            box-shadow: 0 16px 32px rgba(0,0,0,0.45);
+        }
+
+        .skill-stat-label {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-bottom: 6px;
+        }
+
+        body.dark-mode .skill-stat-label {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .skill-stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .skill-stat-detail {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        body.dark-mode .skill-stat-detail {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .skill-stat-trend {
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        #skillChart .x-axis text,
+        #skillChart .y-axis text {
+            font-size: 0.85rem;
+            fill: #6c757d;
+            font-weight: 500;
+        }
+
+        body.dark-mode #skillChart .x-axis text,
+        body.dark-mode #skillChart .y-axis text {
+            fill: rgba(255,255,255,0.75);
+        }
+
+        #skillChart .y-axis line {
+            stroke: rgba(0,0,0,0.08);
+        }
+
+        body.dark-mode #skillChart .y-axis line,
+        body.dark-mode #skillChart .x-axis line {
+            stroke: rgba(255,255,255,0.1);
+        }
+
+        .skill-focus-line {
+            stroke: rgba(75, 157, 255, 0.5);
+            stroke-dasharray: 4;
+        }
+
+        .skill-focus-dot {
+            stroke: #ffffff;
+            stroke-width: 2px;
+        }
+
+        body.dark-mode .skill-focus-dot {
+            stroke: rgba(0,0,0,0.6);
+        }
+
+        .skill-overlay {
+            cursor: crosshair;
+        }
+
+        /* Creative Questboard styles */
+        #creativeQuest {
+            overflow: visible;
+        }
+
+        .quest-progress {
+            background: linear-gradient(120deg, rgba(75, 157, 255, 0.12), rgba(111, 66, 193, 0.08));
+            border-radius: 20px;
+            padding: 20px 24px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        body.dark-mode .quest-progress {
+            background: linear-gradient(120deg, rgba(75, 157, 255, 0.18), rgba(111, 66, 193, 0.12));
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.35);
+        }
+
+        .quest-progress::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 16px;
+            border: 1px solid rgba(75, 157, 255, 0.2);
+            pointer-events: none;
+        }
+
+        body.dark-mode .quest-progress::after {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .quest-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quest-progress-label {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: #5c6c7a;
+        }
+
+        body.dark-mode .quest-progress-label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .quest-progress-percent {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.02em;
+        }
+
+        body.dark-mode .quest-progress-percent {
+            color: #7aa9ff;
+        }
+
+        .quest-progress-bar {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            background: rgba(75, 157, 255, 0.18);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .quest-progress-bar {
+            background: rgba(75, 157, 255, 0.25);
+        }
+
+        .quest-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4b9dff, #7f6cff);
+            border-radius: inherit;
+            transition: width 0.45s ease;
+        }
+
+        .quest-progress-meta {
+            font-size: 0.9rem;
+            color: #5c6c7a;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        body.dark-mode .quest-progress-meta {
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .quest-progress-mood {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 6px;
+        }
+
+        body.dark-mode .quest-progress-mood {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .quest-grid .quest-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            background: white;
+            border-radius: 20px;
+            padding: 26px;
+            border: 1px solid rgba(75, 157, 255, 0.12);
+            box-shadow: 0 18px 32px rgba(15, 59, 126, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            overflow: hidden;
+        }
+
+        .quest-grid .quest-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 36px rgba(15, 59, 126, 0.12);
+        }
+
+        body.dark-mode .quest-grid .quest-card {
+            background: var(--dark-card-bg);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        .quest-grid .quest-card.is-complete {
+            border-color: rgba(76, 175, 80, 0.55);
+            box-shadow: 0 24px 38px rgba(76, 175, 80, 0.2);
+        }
+
+        body.dark-mode .quest-grid .quest-card.is-complete {
+            border-color: rgba(129, 199, 132, 0.65);
+            box-shadow: 0 24px 38px rgba(56, 142, 60, 0.45);
+        }
+
+        .quest-grid .quest-card.is-focus {
+            border-color: rgba(255, 193, 7, 0.65);
+            box-shadow: 0 26px 42px rgba(255, 193, 7, 0.28);
+        }
+
+        .quest-card::after {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(75, 157, 255, 0.18), transparent 70%);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .quest-card:hover::after {
+            transform: scale(1.1) translate(-10px, 18px);
+            opacity: 0.85;
+        }
+
+        body.dark-mode .quest-card::after {
+            background: radial-gradient(circle, rgba(122, 169, 255, 0.2), transparent 70%);
+        }
+
+        .quest-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .quest-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+        }
+
+        .quest-chip-maker {
+            background: rgba(75, 157, 255, 0.18);
+            color: #1f6feb;
+        }
+
+        .quest-chip-story {
+            background: rgba(245, 112, 200, 0.2);
+            color: #b83280;
+        }
+
+        .quest-chip-research {
+            background: rgba(45, 212, 191, 0.2);
+            color: #0f766e;
+        }
+
+        .quest-chip-community {
+            background: rgba(255, 193, 7, 0.25);
+            color: #b7791f;
+        }
+
+        .quest-chip-learning {
+            background: rgba(167, 139, 250, 0.25);
+            color: #6d28d9;
+        }
+
+        .quest-chip-wellness {
+            background: rgba(129, 199, 132, 0.25);
+            color: #2f855a;
+        }
+
+        body.dark-mode .quest-chip-maker,
+        body.dark-mode .quest-chip-story,
+        body.dark-mode .quest-chip-research,
+        body.dark-mode .quest-chip-community,
+        body.dark-mode .quest-chip-learning,
+        body.dark-mode .quest-chip-wellness {
+            color: rgba(255, 255, 255, 0.88);
+        }
+
+        .quest-title {
+            font-weight: 700;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            color: #1f2933;
+        }
+
+        body.dark-mode .quest-title {
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .quest-description {
+            color: #5c6c7a;
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode .quest-description {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .quest-status {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+        }
+
+        .quest-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            margin-top: auto;
+            color: #4a5568;
+            font-size: 0.85rem;
+        }
+
+        body.dark-mode .quest-meta {
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .quest-meta i {
+            color: currentColor;
+        }
+
+        .quest-toggle-btn {
+            border-radius: 999px;
+            font-weight: 600;
+            padding: 0.45rem 1.2rem;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .quest-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(75, 157, 255, 0.25);
+        }
+
+        .quest-grid .quest-card.is-complete .quest-toggle-btn:hover {
+            box-shadow: 0 12px 20px rgba(46, 125, 50, 0.25);
+        }
+
+        .quest-grid .quest-card.is-complete .quest-toggle-btn {
+            transform: none;
+        }
+
+        .quest-grid .quest-card.is-complete .quest-toggle-btn i {
+            color: inherit;
+        }
+
+        .quest-grid .quest-card.is-complete .quest-description {
+            opacity: 0.85;
+        }
+
+        .quest-spotlight {
+            position: relative;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 30px;
+            background: linear-gradient(135deg, rgba(240, 244, 255, 0.9), rgba(255, 240, 250, 0.9));
+            overflow: hidden;
+        }
+
+        .quest-spotlight::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(127, 108, 255, 0.25), transparent 60%);
+            pointer-events: none;
+        }
+
+        body.dark-mode .quest-spotlight {
+            background: linear-gradient(135deg, rgba(35, 39, 65, 0.95), rgba(30, 25, 55, 0.9));
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        body.dark-mode .quest-spotlight::after {
+            background: radial-gradient(circle at top right, rgba(127, 108, 255, 0.35), transparent 65%);
+        }
+
+        .quest-spotlight-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(75, 157, 255, 0.18);
+            font-weight: 600;
+            color: #1f6feb;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+        }
+
+        body.dark-mode .quest-spotlight-chip {
+            background: rgba(127, 108, 255, 0.25);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .quest-spotlight-text {
+            margin: 0;
+            font-size: 1rem;
+            color: #344054;
+            max-width: 580px;
+        }
+
+        body.dark-mode .quest-spotlight-text {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .quest-spotlight-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .quest-spotlight-btn,
+        .quest-focus-btn {
+            border-radius: 999px;
+            font-weight: 600;
+            padding: 0.45rem 1.2rem;
+        }
+
+        @media (max-width: 992px) {
+            .quest-progress-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .quest-progress-percent {
+                font-size: 1.8rem;
+            }
+
+            .quest-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .quest-toggle-btn {
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .quest-grid .quest-card {
+                padding: 22px;
+            }
+
+            .quest-spotlight {
+                padding: 20px;
+            }
+
+            .quest-spotlight-text {
+                font-size: 0.95rem;
+            }
+        }
+
         .nav-link {
             position: relative;
             transition: color 0.3s;
@@ -3094,6 +3692,215 @@
                     <div class="legend-item">
                         <span class="legend-color" style="background-color: #e0e0e0;"></span>
                         <span class="legend-label">Not Visited</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card section-animate" id="skillDashboard">
+            <div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-3">
+                <div>
+                    <h2 class="display-6 fw-bold text-primary mb-2">Learning Pulse</h2>
+                    <p class="text-muted mb-0">A quick snapshot of how I have been building, writing, and experimenting recently.</p>
+                </div>
+                <div class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm align-self-center">
+                    <i class="fas fa-chart-line me-1"></i>Live insights
+                </div>
+            </div>
+
+            <div class="skill-chart-card">
+                <div class="skill-chart-container">
+                    <div id="skillChart"></div>
+                </div>
+                <div class="skill-legend" id="skillLegend"></div>
+            </div>
+
+            <div class="row g-3 mt-4">
+                <div class="col-md-4">
+                    <div class="skill-stat-card">
+                        <div class="skill-stat-label">Latest Month</div>
+                        <div class="skill-stat-value" id="skillSummaryTotal">0</div>
+                        <p class="skill-stat-detail mb-1">creative sessions in <span id="skillSummaryMonth">—</span></p>
+                        <p class="skill-stat-trend mb-0" id="skillTrendText"></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="skill-stat-card">
+                        <div class="skill-stat-label">Most Active Track</div>
+                        <div class="skill-stat-value" id="skillHighlightValue">0</div>
+                        <p class="skill-stat-detail mb-0">Time spent on <span id="skillHighlight">—</span></p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="skill-stat-card">
+                        <div class="skill-stat-label">Consistency</div>
+                        <div class="skill-stat-value" id="skillAverageValue">0</div>
+                        <p class="skill-stat-detail mb-0">sessions/month across <span id="skillMonthsCount">0</span> months</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card section-animate" id="creativeQuest">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                <div>
+                    <h2 class="display-6 fw-bold text-primary mb-2">Creative Questboard</h2>
+                    <p class="text-muted mb-0">Lightweight missions to keep momentum across making, sharing, and recharging.</p>
+                </div>
+                <div class="badge bg-info text-dark px-3 py-2 rounded-pill shadow-sm align-self-center">
+                    <i class="fas fa-magic me-1"></i>Fresh feature
+                </div>
+            </div>
+
+            <div class="quest-progress mb-4">
+                <div class="quest-progress-header">
+                    <div>
+                        <div class="quest-progress-label">Momentum tracker</div>
+                        <div class="quest-progress-meta" id="questProgressMeta">0 of 6 quests complete</div>
+                    </div>
+                    <div class="quest-progress-percent" id="questProgressPercent">0%</div>
+                </div>
+                <div class="quest-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="quest-progress-fill" id="questProgressFill"></div>
+                </div>
+                <div class="quest-progress-mood" id="questProgressMood">Choose a quest to kickstart your flow.</div>
+            </div>
+
+            <div class="row g-4 quest-grid">
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="micro-tool">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-maker"><i class="fas fa-tools"></i> Maker sprint</span>
+                                <h5 class="quest-title">Prototype a micro-tool</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="micro-tool">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Ship a 60-minute build that clears a recurring friction point for future you or a collaborator.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-hourglass-half me-1"></i>45 min</span>
+                            <span><i class="fas fa-bolt me-1"></i>Momentum +2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="story-drop">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-story"><i class="fas fa-pen-nib"></i> Story drop</span>
+                                <h5 class="quest-title">Draft a 200-word dispatch</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="story-drop">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Capture a quick narrative about something you noticed, learned, or built this week.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-clock me-1"></i>30 min</span>
+                            <span><i class="fas fa-feather-alt me-1"></i>Share-ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="research-scan">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-research"><i class="fas fa-compass"></i> Research pulse</span>
+                                <h5 class="quest-title">Map a curious domain</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="research-scan">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Skim three resources, log the sharpest insight, and note one follow-up experiment.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-book me-1"></i>3 sources</span>
+                            <span><i class="fas fa-lightbulb me-1"></i>Insight logged</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="community-ping">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-community"><i class="fas fa-comments"></i> Community ping</span>
+                                <h5 class="quest-title">Send a thoughtful signal</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="community-ping">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Reach out with feedback, a thank-you, or a resource that amplifies someone else&apos;s work.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-share-alt me-1"></i>1 connection</span>
+                            <span><i class="fas fa-smile-beam me-1"></i>Goodwill unlocked</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="learning-loop">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-learning"><i class="fas fa-graduation-cap"></i> Learning loop</span>
+                                <h5 class="quest-title">Run a feedback loop</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="learning-loop">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Revisit a recent build, capture one lesson, and note the next iteration you&apos;ll try.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-sync-alt me-1"></i>Review &amp; iterate</span>
+                            <span><i class="fas fa-chart-line me-1"></i>Upgrade ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="quest-card h-100" data-quest-id="wellness-reset">
+                        <div class="quest-card-header">
+                            <div>
+                                <span class="quest-chip quest-chip-wellness"><i class="fas fa-heart"></i> Wellness reset</span>
+                                <h5 class="quest-title">Design a mindful recharge</h5>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary quest-toggle-btn" data-quest-id="wellness-reset">
+                                <i class="fas fa-play me-2"></i>Start
+                            </button>
+                        </div>
+                        <p class="quest-description mb-3">Choose a 20-minute ritual—walk, stretch, or journaling—that keeps your creative energy sustainable.</p>
+                        <div class="quest-status text-primary">Ready to launch</div>
+                        <div class="quest-meta">
+                            <span><i class="fas fa-leaf me-1"></i>20 min</span>
+                            <span><i class="fas fa-battery-full me-1"></i>Energy restored</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quest-spotlight">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3">
+                        <span class="quest-spotlight-chip"><i class="fas fa-magic"></i> Spotlight prompt</span>
+                        <p class="quest-spotlight-text" id="questSpotlightText">Tap the shuffle button to spin up a fresh creative prompt.</p>
+                    </div>
+                    <div class="quest-spotlight-actions">
+                        <button type="button" class="btn btn-outline-primary quest-spotlight-btn" id="questSpotlightBtn">
+                            <i class="fas fa-random me-2"></i>Shuffle prompt
+                        </button>
+                        <button type="button" class="btn btn-primary quest-focus-btn" id="questShuffleBtn">
+                            <i class="fas fa-crosshairs me-2"></i>Focus a quest
+                        </button>
                     </div>
                 </div>
             </div>
@@ -5618,6 +6425,504 @@ searchInput.addEventListener('focus', () => {
             }
         }
         
+        const skillJourneyData = [
+            { month: '2024-08', projects: 1, articles: 1, experiments: 2 },
+            { month: '2024-09', projects: 2, articles: 0, experiments: 3 },
+            { month: '2024-10', projects: 2, articles: 1, experiments: 2 },
+            { month: '2024-11', projects: 3, articles: 1, experiments: 3 },
+            { month: '2024-12', projects: 2, articles: 2, experiments: 3 },
+            { month: '2025-01', projects: 3, articles: 2, experiments: 4 },
+            { month: '2025-02', projects: 2, articles: 1, experiments: 5 },
+            { month: '2025-03', projects: 4, articles: 2, experiments: 4 }
+        ];
+
+        const skillJourneyMetrics = [
+            { key: 'projects', label: 'Projects shipped' },
+            { key: 'articles', label: 'Articles published' },
+            { key: 'experiments', label: 'Experiments & prototypes' }
+        ];
+
+        let skillParsedData = [];
+        let skillColorScale;
+        let parseSkillMonth;
+        let formatSkillMonthLong;
+        let formatSkillMonthTick;
+        let skillResizeTimeout;
+
+        function initSkillDashboard() {
+            if (typeof d3 === 'undefined') return;
+            const chartContainer = document.getElementById('skillChart');
+            if (!chartContainer) return;
+
+            parseSkillMonth = d3.timeParse('%Y-%m');
+            formatSkillMonthLong = d3.timeFormat('%B %Y');
+            formatSkillMonthTick = d3.timeFormat('%b');
+
+            skillParsedData = skillJourneyData
+                .map(entry => ({
+                    ...entry,
+                    date: parseSkillMonth(entry.month)
+                }))
+                .filter(entry => entry.date);
+
+            skillParsedData.sort((a, b) => a.date - b.date);
+
+            if (!skillParsedData.length) return;
+
+            skillColorScale = d3.scaleOrdinal()
+                .domain(skillJourneyMetrics.map(metric => metric.key))
+                .range(['#4B9DFF', '#FF6B6B', '#6BCB77']);
+
+            buildSkillLegend();
+            updateSkillSummary();
+            renderSkillJourney();
+
+            window.addEventListener('resize', handleSkillResize);
+        }
+
+        function handleSkillResize() {
+            if (!skillParsedData.length) return;
+            clearTimeout(skillResizeTimeout);
+            skillResizeTimeout = setTimeout(renderSkillJourney, 200);
+        }
+
+        function buildSkillLegend() {
+            const legend = document.getElementById('skillLegend');
+            if (!legend || !skillColorScale) return;
+            legend.innerHTML = '';
+
+            skillJourneyMetrics.forEach(metric => {
+                const item = document.createElement('div');
+                item.className = 'skill-legend-item';
+                item.innerHTML = `
+                    <span class="skill-legend-swatch" style="background:${skillColorScale(metric.key)}"></span>
+                    <span>${metric.label}</span>
+                `;
+                legend.appendChild(item);
+            });
+        }
+
+        function updateSkillSummary() {
+            if (!skillParsedData.length) return;
+
+            const latest = skillParsedData[skillParsedData.length - 1];
+            const previous = skillParsedData.length > 1 ? skillParsedData[skillParsedData.length - 2] : null;
+
+            const latestTotals = skillJourneyMetrics.map(metric => latest[metric.key] || 0);
+            const latestTotal = latestTotals.reduce((sum, value) => sum + value, 0);
+
+            const totalSessions = skillParsedData.reduce((sum, entry) => {
+                return sum + skillJourneyMetrics.reduce((innerSum, metric) => innerSum + (entry[metric.key] || 0), 0);
+            }, 0);
+
+            const averagePerMonth = Math.round(totalSessions / skillParsedData.length);
+
+            const highlightMetric = skillJourneyMetrics.reduce((best, metric) => {
+                return (latest[metric.key] || 0) > (latest[best.key] || 0) ? metric : best;
+            }, skillJourneyMetrics[0]);
+
+            const summaryMonthEl = document.getElementById('skillSummaryMonth');
+            const summaryTotalEl = document.getElementById('skillSummaryTotal');
+            const trendTextEl = document.getElementById('skillTrendText');
+            const highlightValueEl = document.getElementById('skillHighlightValue');
+            const highlightLabelEl = document.getElementById('skillHighlight');
+            const averageValueEl = document.getElementById('skillAverageValue');
+            const monthsCountEl = document.getElementById('skillMonthsCount');
+
+            if (summaryMonthEl) summaryMonthEl.textContent = formatSkillMonthLong(latest.date);
+            if (summaryTotalEl) summaryTotalEl.textContent = latestTotal;
+            if (highlightValueEl) highlightValueEl.textContent = latest[highlightMetric.key] || 0;
+            if (highlightLabelEl) highlightLabelEl.textContent = highlightMetric.label;
+            if (averageValueEl) averageValueEl.textContent = averagePerMonth;
+            if (monthsCountEl) monthsCountEl.textContent = skillParsedData.length;
+
+            if (trendTextEl) {
+                trendTextEl.className = 'skill-stat-trend mb-0';
+
+                if (previous) {
+                    const previousTotal = skillJourneyMetrics.reduce((sum, metric) => sum + (previous[metric.key] || 0), 0);
+                    const diff = latestTotal - previousTotal;
+                    const diffClass = diff >= 0 ? 'text-success' : 'text-danger';
+                    const diffIcon = diff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+                    trendTextEl.innerHTML = `<span class="${diffClass}"><i class="fas ${diffIcon} me-1"></i>${diff >= 0 ? '+' : ''}${diff} vs previous month</span>`;
+                } else {
+                    trendTextEl.textContent = 'Tracking started this month.';
+                }
+            }
+        }
+
+        function renderSkillJourney() {
+            if (!skillParsedData.length) return;
+
+            const container = d3.select('#skillChart');
+            if (container.empty()) return;
+
+            const bounds = container.node().getBoundingClientRect();
+            const width = bounds.width || 600;
+            const height = bounds.height || 320;
+
+            container.selectAll('*').remove();
+
+            const margin = { top: 24, right: 28, bottom: 48, left: 60 };
+            const innerWidth = width - margin.left - margin.right;
+            const innerHeight = height - margin.top - margin.bottom;
+
+            if (innerWidth <= 0 || innerHeight <= 0) return;
+
+            const svg = container.append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`)
+                .attr('preserveAspectRatio', 'xMidYMid meet');
+
+            const chart = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleTime()
+                .domain(d3.extent(skillParsedData, d => d.date))
+                .range([0, innerWidth]);
+
+            const maxValue = d3.max(skillParsedData, d => d3.max(skillJourneyMetrics, metric => d[metric.key] || 0)) || 1;
+            const yMax = maxValue < 5 ? maxValue + 1 : maxValue * 1.15;
+
+            const y = d3.scaleLinear()
+                .domain([0, yMax])
+                .nice()
+                .range([innerHeight, 0]);
+
+            const xAxis = g => g
+                .attr('transform', `translate(0, ${innerHeight})`)
+                .call(d3.axisBottom(x).ticks(Math.min(skillParsedData.length, 8)).tickFormat(formatSkillMonthTick))
+                .call(g => g.select('.domain').remove())
+                .call(g => g.selectAll('line').attr('stroke-opacity', 0.1));
+
+            const yAxis = g => g
+                .call(d3.axisLeft(y).ticks(5).tickSize(-innerWidth))
+                .call(g => g.select('.domain').remove())
+                .call(g => g.selectAll('.tick line').attr('stroke', 'rgba(0,0,0,0.08)').attr('stroke-dasharray', '4,4'))
+                .call(g => g.selectAll('.tick text').attr('x', -10));
+
+            chart.append('g').attr('class', 'x-axis').call(xAxis);
+            chart.append('g').attr('class', 'y-axis').call(yAxis);
+
+            const lineGenerator = d3.line()
+                .curve(d3.curveMonotoneX)
+                .x(d => x(d.date))
+                .y(d => y(d.value));
+
+            skillJourneyMetrics.forEach(metric => {
+                const metricData = skillParsedData.map(entry => ({
+                    date: entry.date,
+                    value: entry[metric.key] || 0
+                }));
+
+                chart.append('path')
+                    .datum(metricData)
+                    .attr('fill', 'none')
+                    .attr('stroke', skillColorScale(metric.key))
+                    .attr('stroke-width', 3)
+                    .attr('d', lineGenerator);
+
+                chart.selectAll(`.skill-dot-${metric.key}`)
+                    .data(metricData)
+                    .enter()
+                    .append('circle')
+                    .attr('class', `skill-focus-dot skill-dot-${metric.key}`)
+                    .attr('cx', d => x(d.date))
+                    .attr('cy', d => y(d.value))
+                    .attr('r', 4)
+                    .attr('fill', '#ffffff')
+                    .attr('stroke', skillColorScale(metric.key))
+                    .attr('stroke-width', 2)
+                    .attr('opacity', 0.95);
+            });
+
+            const focusLine = chart.append('line')
+                .attr('class', 'skill-focus-line')
+                .attr('y1', 0)
+                .attr('y2', innerHeight)
+                .style('opacity', 0);
+
+            const focusDots = skillJourneyMetrics.map(metric =>
+                chart.append('circle')
+                    .attr('class', 'skill-focus-dot')
+                    .attr('r', 6)
+                    .attr('fill', skillColorScale(metric.key))
+                    .style('opacity', 0)
+            );
+
+            container.selectAll('.skill-tooltip').remove();
+            const tooltip = container.append('div')
+                .attr('class', 'skill-tooltip')
+                .style('opacity', 0);
+
+            const overlay = chart.append('rect')
+                .attr('class', 'skill-overlay')
+                .attr('width', innerWidth)
+                .attr('height', innerHeight)
+                .attr('fill', 'transparent')
+                .attr('pointer-events', 'all')
+                .on('mousemove', (event) => handlePointerMove(event))
+                .on('mouseleave', handlePointerLeave);
+
+            const bisectDate = d3.bisector(d => d.date).left;
+
+            function handlePointerMove(event) {
+                const [mx] = d3.pointer(event);
+                const date = x.invert(mx);
+                let index = bisectDate(skillParsedData, date, 1);
+
+                if (index >= skillParsedData.length) {
+                    index = skillParsedData.length - 1;
+                }
+
+                const d0 = skillParsedData[index - 1] || skillParsedData[index];
+                const d1 = skillParsedData[index];
+                const datum = d1 && (date - d0.date > d1.date - date) ? d1 : d0;
+
+                const xPosition = x(datum.date);
+
+                focusLine
+                    .attr('x1', xPosition)
+                    .attr('x2', xPosition)
+                    .style('opacity', 1);
+
+                focusDots.forEach((dot, idx) => {
+                    const metric = skillJourneyMetrics[idx];
+                    dot
+                        .attr('cx', xPosition)
+                        .attr('cy', y(datum[metric.key] || 0))
+                        .style('opacity', 1);
+                });
+
+                tooltip.html(`
+                    <div class="skill-tooltip-title">${formatSkillMonthLong(datum.date)}</div>
+                    ${skillJourneyMetrics.map(metric => `
+                        <div class="skill-tooltip-row">
+                            <span class="skill-tooltip-dot" style="background:${skillColorScale(metric.key)}"></span>
+                            <span>${metric.label}</span>
+                            <span class="ms-auto fw-semibold">${datum[metric.key] || 0}</span>
+                        </div>
+                    `).join('')}
+                `);
+
+                tooltip.style('opacity', 1);
+
+                const tooltipNode = tooltip.node();
+                const tooltipWidth = tooltipNode.offsetWidth;
+                const tooltipHeight = tooltipNode.offsetHeight;
+
+                let tooltipX = margin.left + xPosition + 16;
+                if (tooltipX + tooltipWidth > width) {
+                    tooltipX = margin.left + xPosition - tooltipWidth - 16;
+                }
+                tooltipX = Math.max(0, Math.min(tooltipX, width - tooltipWidth));
+
+                let tooltipY = margin.top + 10;
+                if (tooltipY + tooltipHeight > height) {
+                    tooltipY = height - tooltipHeight - 10;
+                }
+
+                tooltip
+                    .style('left', `${tooltipX}px`)
+                    .style('top', `${tooltipY}px`)
+                    .style('transform', 'translateY(0)');
+            }
+
+            function handlePointerLeave() {
+                focusLine.style('opacity', 0);
+                focusDots.forEach(dot => dot.style('opacity', 0));
+                tooltip.style('opacity', 0);
+            }
+        }
+
+        function initCreativeQuestboard() {
+            const questCards = Array.from(document.querySelectorAll('.quest-card[data-quest-id]'));
+            const progressFill = document.getElementById('questProgressFill');
+            const progressPercent = document.getElementById('questProgressPercent');
+            const progressMeta = document.getElementById('questProgressMeta');
+            const progressMood = document.getElementById('questProgressMood');
+            const focusButton = document.getElementById('questShuffleBtn');
+            const promptButton = document.getElementById('questSpotlightBtn');
+            const spotlightText = document.getElementById('questSpotlightText');
+
+            if (!questCards.length || !progressFill || !progressPercent || !progressMeta) {
+                return;
+            }
+
+            const progressBar = progressFill.parentElement;
+            const storageKey = 'creativeQuestState';
+            const totalQuests = questCards.length;
+            let questState = {};
+
+            try {
+                const storedState = localStorage.getItem(storageKey);
+                if (storedState) {
+                    questState = JSON.parse(storedState) || {};
+                }
+            } catch (error) {
+                questState = {};
+            }
+
+            const prompts = [
+                'Design a two-sentence pitch for a project you have not started yet.',
+                'List three micro-interactions that would delight someone visiting your next build.',
+                'Sketch an onboarding journey in five bullet points.',
+                'Document a win from this week and how you can replicate it.',
+                'Identify a friction point in your workflow and imagine an automation to remove it.',
+                'Record a 30-second voice note summarising a lesson you just learned.',
+                'Pair two unrelated ideas and outline what a mash-up experiment could look like.',
+                'Define a "done is better" version of a project you have been postponing.',
+                'Capture three questions you want to explore next month.',
+                'Describe the vibe you want your next release to give in three adjectives.'
+            ];
+
+            let lastPrompt = '';
+
+            function getQuestTitle(card) {
+                const titleElement = card.querySelector('.quest-title');
+                return titleElement ? titleElement.textContent.trim() : 'quest';
+            }
+
+            function persistState() {
+                try {
+                    localStorage.setItem(storageKey, JSON.stringify(questState));
+                } catch (error) {
+                    console.warn('Unable to store quest state', error);
+                }
+            }
+
+            function updateMood(completed) {
+                if (!progressMood) return;
+                let message = 'Choose a quest to kickstart your flow.';
+
+                if (completed === 0) {
+                    message = 'Choose a quest to kickstart your flow.';
+                } else if (completed === totalQuests) {
+                    message = 'Questboard clear! Celebrate and plan your next adventure.';
+                } else if (completed >= Math.ceil(totalQuests / 2)) {
+                    message = 'Momentum is surging—stack another win while the energy is high.';
+                } else {
+                    message = 'Nice! Lock in another quick win to build your streak.';
+                }
+
+                progressMood.textContent = message;
+            }
+
+            function updateProgress() {
+                const completed = questCards.filter(card => card.classList.contains('is-complete')).length;
+                const percent = totalQuests ? Math.round((completed / totalQuests) * 100) : 0;
+
+                progressFill.style.width = `${percent}%`;
+                progressPercent.textContent = `${percent}%`;
+                progressMeta.textContent = `${completed} of ${totalQuests} ${completed === 1 ? 'quest' : 'quests'} complete`;
+
+                if (progressBar) {
+                    progressBar.setAttribute('aria-valuenow', String(percent));
+                    progressBar.setAttribute('aria-valuetext', `${percent}% complete`);
+                }
+
+                updateMood(completed);
+            }
+
+            function applyQuestState(card, isComplete) {
+                const button = card.querySelector('.quest-toggle-btn');
+                const status = card.querySelector('.quest-status');
+                const questId = card.dataset.questId;
+
+                card.classList.toggle('is-complete', isComplete);
+                if (isComplete) {
+                    card.classList.remove('is-focus');
+                }
+
+                if (button) {
+                    const questTitle = getQuestTitle(card);
+                    button.classList.toggle('btn-outline-primary', !isComplete);
+                    button.classList.toggle('btn-success', isComplete);
+                    button.innerHTML = isComplete
+                        ? '<i class="fas fa-check me-2"></i>Completed'
+                        : '<i class="fas fa-play me-2"></i>Start';
+                    button.setAttribute('aria-pressed', isComplete ? 'true' : 'false');
+                    button.setAttribute('title', isComplete ? 'Click to reopen this quest' : 'Click to mark this quest complete');
+                    button.setAttribute('aria-label', `${isComplete ? 'Reopen' : 'Complete'} ${questTitle}`);
+                }
+
+                if (status) {
+                    status.textContent = isComplete ? 'Momentum locked in' : 'Ready to launch';
+                    status.classList.toggle('text-success', isComplete);
+                    status.classList.toggle('text-primary', !isComplete);
+                }
+
+                if (questId) {
+                    questState[questId] = isComplete;
+                }
+            }
+
+            function focusQuestCard(card) {
+                questCards.forEach(item => item.classList.remove('is-focus'));
+                card.classList.add('is-focus');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+
+                const title = getQuestTitle(card);
+                if (typeof showToast === 'function') {
+                    showToast(`Spotlight locked on "${title}".`, 'info');
+                }
+            }
+
+            function chooseFocusCard() {
+                if (!questCards.length) return;
+                const incomplete = questCards.filter(card => !card.classList.contains('is-complete'));
+                const pool = incomplete.length ? incomplete : questCards;
+                const chosen = pool[Math.floor(Math.random() * pool.length)];
+                if (chosen) {
+                    focusQuestCard(chosen);
+                }
+            }
+
+            function refreshSpotlight() {
+                if (!spotlightText || !prompts.length) return;
+                const availablePrompts = prompts.filter(prompt => prompt !== lastPrompt);
+                const nextPrompt = availablePrompts[Math.floor(Math.random() * availablePrompts.length)] || prompts[0];
+                spotlightText.textContent = nextPrompt;
+                lastPrompt = nextPrompt;
+            }
+
+            questCards.forEach(card => {
+                const questId = card.dataset.questId;
+                const savedState = questState[questId];
+                const isComplete = typeof savedState === 'boolean' ? savedState : Boolean(savedState);
+                applyQuestState(card, isComplete);
+
+                const button = card.querySelector('.quest-toggle-btn');
+                if (button) {
+                    button.addEventListener('click', () => {
+                        const nextState = !card.classList.contains('is-complete');
+                        applyQuestState(card, nextState);
+                        persistState();
+                        updateProgress();
+                    });
+                }
+            });
+
+            updateProgress();
+            refreshSpotlight();
+
+            if (focusButton) {
+                focusButton.addEventListener('click', () => {
+                    chooseFocusCard();
+                });
+            }
+
+            if (promptButton) {
+                promptButton.addEventListener('click', () => {
+                    refreshSpotlight();
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSkillDashboard);
+        document.addEventListener('DOMContentLoaded', initCreativeQuestboard);
+
         // Fix map position when scrolling
         window.addEventListener('load', function() {
             const mapContainer = document.querySelector('.map-container');
