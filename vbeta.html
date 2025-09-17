@@ -12,18 +12,25 @@
     <meta property="og:title" content="dunc's Website v0.9">
     <meta property="og:description" content="dunc's personal website showcasing various updates and content.">
     <meta property="og:type" content="website">
-    
+    <meta name="theme-color" content="#f3f5fb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <link rel="preload" href="img/patch.png" as="image">
     <link rel="preload" href="img/bingchiling.png" as="image">
     <link rel="preload" href="css/bootstrap.min.css" as="style">
     <link rel="stylesheet" href="css/fontawesome.min.css">
-    
+
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/patch.png">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for firstwebsideofdunc" href="rss.xml">
     <script src="js/d3.v7.min.js" defer></script>
     <script src="js/topojson.min.js" defer></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
         :root {
             --primary-color: #4B9DFF;
             --dark-bg: #121212;
@@ -31,15 +38,52 @@
             --dark-card-bg: #1e1e1e;
             --dark-text-color: #e0e0e0;
             --navbar-height: 80px;
+            --secondary-color: #5ef2c3;
+            --accent-color: #7f7fff;
+            --glass-border: rgba(120, 141, 255, 0.18);
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
+            --dark-glass-bg: rgba(18, 21, 34, 0.82);
+            --muted-text: #5b6476;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-bg);
-            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(140deg, rgba(243, 245, 251, 0.9), rgba(236, 238, 255, 0.45)),
+                        radial-gradient(circle at 20% 20%, rgba(117, 107, 255, 0.18), transparent 55%),
+                        radial-gradient(circle at 80% 0%, rgba(62, 200, 255, 0.16), transparent 55%),
+                        var(--light-bg);
+            color: #0f172a;
+            transition: background-color 0.6s ease, color 0.6s ease;
             line-height: 1.6;
             scroll-padding-top: var(--navbar-height);
             padding-top: var(--navbar-height);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(117, 107, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            filter: blur(50px);
+            z-index: -2;
+            opacity: 0.6;
+            transition: opacity 0.6s ease;
+        }
+
+        body::before {
+            top: -140px;
+            left: -160px;
+        }
+
+        body::after {
+            bottom: -160px;
+            right: -80px;
+            background: radial-gradient(circle, rgba(94, 242, 195, 0.22) 0%, rgba(255, 255, 255, 0) 75%);
         }
 
         .hero-section {
@@ -51,9 +95,52 @@
             border-radius: 0 0 20px 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        
+
         body.dark-mode .hero-section {
             background: linear-gradient(135deg, var(--dark-bg) 0%, #132a3a 100%);
+        }
+
+        .hero-shell {
+            position: relative;
+            padding: 3rem clamp(1.5rem, 5vw, 3rem);
+            border-radius: 34px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(244, 247, 255, 0.52));
+            border: 1px solid rgba(117, 107, 255, 0.14);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(24px);
+            overflow: hidden;
+        }
+
+        .hero-shell::before,
+        .hero-shell::after {
+            content: '';
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(0);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .hero-shell::before {
+            width: 420px;
+            height: 420px;
+            top: -200px;
+            right: -120px;
+            background: radial-gradient(circle, rgba(117, 107, 255, 0.22), transparent 70%);
+        }
+
+        .hero-shell::after {
+            width: 360px;
+            height: 360px;
+            bottom: -180px;
+            left: -60px;
+            background: radial-gradient(circle, rgba(62, 200, 255, 0.26), transparent 70%);
+        }
+
+        body.dark-mode .hero-shell {
+            background: linear-gradient(135deg, rgba(13, 18, 36, 0.92), rgba(22, 14, 46, 0.85));
+            border-color: rgba(118, 142, 255, 0.28);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
         }
         
         .animated-text {
@@ -101,16 +188,386 @@
             100% { transform: scale(1); opacity: 0.5; }
         }
 
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            background: rgba(75, 157, 255, 0.12);
+            border: 1px solid rgba(75, 157, 255, 0.25);
+            color: var(--primary-color);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-eyebrow i {
+            font-size: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.75rem, 4vw, 3.5rem);
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            color: var(--muted-text);
+            max-width: 520px;
+            margin-top: 1.25rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-hero-primary,
+        .btn-hero-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 18px 40px rgba(75, 157, 255, 0.35);
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 28px 50px rgba(75, 157, 255, 0.4);
+        }
+
+        .btn-hero-secondary {
+            background: rgba(255, 255, 255, 0.75);
+            color: var(--primary-color);
+            border: 1px solid rgba(117, 107, 255, 0.35);
+        }
+
+        .btn-hero-secondary:hover {
+            transform: translateY(-2px);
+            background: rgba(117, 107, 255, 0.12);
+            border-color: rgba(117, 107, 255, 0.45);
+        }
+
+        body.dark-mode .hero-eyebrow {
+            background: rgba(118, 142, 255, 0.18);
+            border-color: rgba(118, 142, 255, 0.35);
+            color: var(--dark-text-color);
+        }
+
+        body.dark-mode .hero-subtitle {
+            color: rgba(229, 231, 235, 0.78);
+        }
+
+        body.dark-mode .btn-hero-secondary {
+            background: rgba(118, 142, 255, 0.12);
+            color: var(--dark-text-color);
+            border-color: rgba(118, 142, 255, 0.45);
+        }
+
+        .btn-hero-primary[disabled],
+        .btn-hero-secondary[disabled] {
+            cursor: not-allowed;
+            opacity: 0.6;
+            box-shadow: none;
+        }
+
+        .hero-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .hero-meta-card {
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 18px;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid rgba(117, 107, 255, 0.16);
+            backdrop-filter: blur(14px);
+        }
+
+        .hero-meta-card strong {
+            font-size: 1.35rem;
+        }
+
+        .hero-meta-card span {
+            display: block;
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+            color: var(--muted-text);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        body.dark-mode .hero-meta-card {
+            background: rgba(18, 21, 34, 0.78);
+            border-color: rgba(118, 142, 255, 0.22);
+        }
+
+        body.dark-mode .hero-meta-card span {
+            color: rgba(226, 229, 240, 0.7);
+        }
+
+        .glass-section {
+            padding: clamp(3rem, 6vw, 4rem) 0;
+            position: relative;
+        }
+
+        .glass-hub-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-hub-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 85% 15%, rgba(126, 127, 255, 0.22), transparent 55%);
+            pointer-events: none;
+        }
+
+        .glass-hub-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .glass-feature-card {
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 1px solid rgba(117, 107, 255, 0.16);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        .glass-feature-card i {
+            font-size: 1.75rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .glass-feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .glass-feature-card p {
+            color: var(--muted-text);
+        }
+
+        body.dark-mode .glass-feature-card {
+            background: rgba(18, 21, 34, 0.82);
+            border-color: rgba(118, 142, 255, 0.22);
+            box-shadow: 0 24px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        body.dark-mode .glass-feature-card p {
+            color: rgba(226, 229, 240, 0.75);
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 1.25rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            background: rgba(75, 157, 255, 0.12);
+            color: var(--primary-color);
+            border: 1px solid rgba(75, 157, 255, 0.25);
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .status-chip i {
+            font-size: 1rem;
+        }
+
+        .status-chip.status-info {
+            background: rgba(75, 157, 255, 0.12);
+            border-color: rgba(75, 157, 255, 0.25);
+            color: var(--primary-color);
+        }
+
+        .status-chip.status-success {
+            background: rgba(94, 242, 195, 0.18);
+            border-color: rgba(94, 242, 195, 0.35);
+            color: #0b7a55;
+        }
+
+        .status-chip.status-warning {
+            background: rgba(255, 193, 7, 0.2);
+            border-color: rgba(255, 193, 7, 0.35);
+            color: #b08000;
+        }
+
+        .status-chip.status-error {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: rgba(248, 113, 113, 0.35);
+            color: #b91c1c;
+        }
+
+        body.dark-mode .status-chip {
+            background: rgba(118, 142, 255, 0.18);
+            border-color: rgba(118, 142, 255, 0.35);
+            color: var(--dark-text-color);
+        }
+
+        .pwa-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .rss-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        .rss-card {
+            background: rgba(255, 255, 255, 0.68);
+            border-radius: 20px;
+            padding: 1.2rem 1.35rem;
+            border: 1px solid rgba(117, 107, 255, 0.16);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 180px;
+        }
+
+        .rss-card h4 {
+            font-size: 1.05rem;
+        }
+
+        .rss-card a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .rss-card a:hover {
+            text-decoration: underline;
+        }
+
+        .rss-date {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+        }
+
+        .rss-description {
+            font-size: 0.9rem;
+            color: var(--muted-text);
+            flex-grow: 1;
+        }
+
+        body.dark-mode .rss-card {
+            background: rgba(18, 21, 34, 0.82);
+            border-color: rgba(118, 142, 255, 0.22);
+            color: var(--dark-text-color);
+        }
+
+        body.dark-mode .rss-date,
+        body.dark-mode .rss-description {
+            color: rgba(226, 229, 240, 0.7);
+        }
+
+        .rss-empty {
+            text-align: center;
+            color: var(--muted-text);
+            padding: 1.25rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px dashed rgba(117, 107, 255, 0.3);
+        }
+
+        body.dark-mode .rss-empty {
+            background: rgba(18, 21, 34, 0.7);
+            color: var(--dark-text-color);
+            border-color: rgba(118, 142, 255, 0.3);
+        }
+
+        .rss-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .rss-tag {
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            background: rgba(75, 157, 255, 0.12);
+            border: 1px solid rgba(75, 157, 255, 0.25);
+            color: var(--primary-color);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        body.dark-mode .rss-tag {
+            background: rgba(118, 142, 255, 0.18);
+            border-color: rgba(118, 142, 255, 0.35);
+            color: var(--dark-text-color);
+        }
+
+        @media (max-width: 991px) {
+            .hero-shell {
+                padding: 2.5rem 1.75rem;
+            }
+
+            .hero-meta {
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .hero-cta {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-hero-primary,
+            .btn-hero-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(117, 107, 255, 0.12);
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
             transition: all 0.3s ease;
             padding: 10px 0;
         }
-        
+
         body.dark-mode .navbar {
-            background: rgba(25, 25, 25, 0.95);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(18, 21, 34, 0.82);
+            border-color: rgba(118, 142, 255, 0.22);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
         }
         
         .navbar-brand h5 {
@@ -182,18 +639,20 @@
         }
 
         .content-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s;
+            background: var(--glass-bg);
+            border-radius: 24px;
+            padding: clamp(24px, 4vw, 32px);
+            margin: 24px 0;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+            backdrop-filter: blur(18px);
             scroll-margin-top: var(--navbar-height);
         }
 
         .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
         }
 
         .quick-links {
@@ -206,19 +665,21 @@
         .link-card {
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-radius: 10px;
-            background: white;
+            padding: 18px;
+            border-radius: 18px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(16px);
             text-decoration: none;
             color: inherit;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .link-card:hover {
-            transform: translateX(5px) translateY(-2px);
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transform: translateX(6px) translateY(-3px);
+            background: linear-gradient(135deg, rgba(75, 157, 255, 0.18), rgba(126, 127, 255, 0.2));
+            color: #0f172a;
+            box-shadow: 0 24px 50px rgba(15, 23, 42, 0.18);
         }
 
         .link-card img {
@@ -317,18 +778,28 @@
         }
 
         body.dark-mode {
-            background-color: var(--dark-bg);
+            background: radial-gradient(circle at 18% 15%, rgba(117, 107, 255, 0.18), transparent 55%),
+                        radial-gradient(circle at 82% 10%, rgba(62, 200, 255, 0.18), transparent 55%),
+                        var(--dark-bg);
             color: var(--dark-text-color);
+        }
+
+        body.dark-mode::before,
+        body.dark-mode::after {
+            background: radial-gradient(circle, rgba(100, 120, 255, 0.2) 0%, rgba(10, 15, 25, 0) 70%);
+            opacity: 0.75;
         }
 
         body.dark-mode .content-card,
         body.dark-mode .link-card {
-            background: var(--dark-card-bg);
+            background: var(--dark-glass-bg);
             color: var(--dark-text-color);
+            border-color: rgba(118, 142, 255, 0.18);
+            box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
         }
 
         body.dark-mode .navbar {
-            background: rgba(0, 0, 0, 0.9) !important;
+            background: rgba(18, 21, 34, 0.82) !important;
         }
 
         body.dark-mode .theme-toggle {
@@ -390,17 +861,19 @@
             height: 100%;
         }
         .meme-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s;
+            background: var(--glass-bg);
+            border-radius: 22px;
+            padding: clamp(24px, 3vw, 32px);
+            margin: 24px 0;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(18px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
         }
 
         .meme-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 26px 60px rgba(15, 23, 42, 0.18);
         }
 
         .meme-card img {
@@ -2843,6 +3316,12 @@
                         <a class="nav-link" href="#legacyVersions"><i class="fas fa-history me-1"></i> Legacy</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#pwaHub"><i class="fas fa-mobile-alt me-1"></i> PWA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#rssHub"><i class="fas fa-rss me-1"></i> RSS Hub</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#otherWebsites"><i class="fas fa-globe me-1"></i> Websites</a>
                     </li>
                     <li class="nav-item">
@@ -2860,20 +3339,111 @@
     <main id="main-content">
         <div class="hero-section">
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 hero-text">
-                        <h1 class="display-4 fw-bold text-primary animated-text">Welcome to DunDD's World</h1>
-                        <p class="lead">Exploring creativity, technology, and personal journeys since 2022</p>
-                        <div class="d-flex gap-3 mt-4">
+                <div class="hero-shell">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-6 hero-text">
+                            <div class="hero-eyebrow animated-text"><i class="fas fa-water"></i> Liquid glass beta</div>
+                            <h1 class="hero-title fw-bold text-primary mt-3">Welcome to DunDD's Liquid Glass Lab</h1>
+                            <p class="hero-subtitle lead">Explore a refreshed immersive experience crafted with fluid motion, glassmorphism, and mindful performance for every screen.</p>
+                            <div class="hero-cta">
+                                <button type="button" class="btn-hero-primary js-install-pwa"><i class="fas fa-download"></i> Install the PWA</button>
+                                <a class="btn-hero-secondary" href="#rssHub"><i class="fas fa-rss"></i> Browse RSS Hub</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hero-image text-center">
+                            <img src="img/patch.png" alt="DunDD logo" class="img-fluid animated-float" width="250" height="250">
                         </div>
                     </div>
-                    <div class="col-lg-6 hero-image text-center">
-                        <img src="img/patch.png" alt="DunDD logo" class="img-fluid animated-float" width="250" height="250">
+                    <div class="hero-meta">
+                        <div class="hero-meta-card">
+                            <strong>2025</strong>
+                            <span>Liquid Glass Era</span>
+                        </div>
+                        <div class="hero-meta-card">
+                            <strong>Offline</strong>
+                            <span>PWA ready</span>
+                        </div>
+                        <div class="hero-meta-card">
+                            <strong>RSS+</strong>
+                            <span>Live feed hub</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <section class="glass-section" id="pwaHub">
+            <div class="container">
+                <div class="content-card glass-hub-card">
+                    <div class="row g-4 align-items-start">
+                        <div class="col-lg-5">
+                            <div class="status-chip" id="pwaStatusMessage"><i class="fas fa-circle-notch fa-spin"></i> Checking PWA status…</div>
+                            <h2 class="display-6 fw-bold text-primary mt-3">Install the Liquid Glass PWA</h2>
+                            <p class="text-muted">Add firstwebsideofdunc to your home screen for an app-like experience. Enjoy silky animations, lightning-fast loads, and offline access to your favourite sections.</p>
+                            <div class="pwa-actions">
+                                <button type="button" class="btn-hero-primary js-install-pwa"><i class="fas fa-download"></i> Install app</button>
+                                <button type="button" class="btn-hero-secondary" onclick="checkPWACacheStatus()"><i class="fas fa-signal"></i> Check offline cache</button>
+                            </div>
+                            <ol class="ps-3 text-muted small mt-3" id="pwaInstallSteps">
+                                <li>Open this site in Chrome, Edge, Safari, or Firefox.</li>
+                                <li>Find the “Install App” or “Add to Home Screen” option in the browser menu.</li>
+                                <li>Launch the installed app to explore the glassy interface offline.</li>
+                            </ol>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="feature-grid">
+                                <div class="glass-feature-card">
+                                    <i class="fas fa-rocket"></i>
+                                    <h3>Instant access</h3>
+                                    <p>Launch directly from your home screen with splash screens, adaptive icons, and zero address bars.</p>
+                                </div>
+                                <div class="glass-feature-card">
+                                    <i class="fas fa-wifi"></i>
+                                    <h3>Offline confidence</h3>
+                                    <p>Service workers keep core content cached, so navigation stays responsive even without a network.</p>
+                                </div>
+                                <div class="glass-feature-card">
+                                    <i class="fas fa-bolt"></i>
+                                    <h3>Performance tuned</h3>
+                                    <p>Preloads, responsive assets, and subtle motion deliver a premium liquid-glass aesthetic without lag.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-section" id="rssHub">
+            <div class="container">
+                <div class="content-card glass-hub-card">
+                    <div class="row g-4 align-items-start">
+                        <div class="col-lg-5">
+                            <div class="status-chip"><i class="fas fa-broadcast-tower"></i> Live updates stream</div>
+                            <h2 class="display-6 fw-bold text-primary mt-3">RSS Hub</h2>
+                            <p class="text-muted">Subscribe to the evolving journey of DunDD with the RSS hub. Track releases, playful experiments, and personal updates right from your favourite reader.</p>
+                            <div class="pwa-actions">
+                                <a class="btn-hero-primary" href="rss.xml" target="_blank" rel="noopener"><i class="fas fa-rss"></i> Open feed</a>
+                                <button type="button" class="btn-hero-secondary" onclick="copyRSSFeed()"><i class="fas fa-link"></i> Copy feed link</button>
+                                <button type="button" class="btn-hero-secondary" onclick="loadRSSPreview(true)"><i class="fas fa-sync"></i> Refresh preview</button>
+                            </div>
+                            <div class="rss-tags">
+                                <span class="rss-tag">Releases</span>
+                                <span class="rss-tag">Dev Logs</span>
+                                <span class="rss-tag">Travel</span>
+                                <span class="rss-tag">Memes</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="rss-preview-grid" id="rssFeedPreview">
+                                <div class="rss-empty">Loading the latest stories…</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <div class="container py-4" id="section1">
             <div class="content-card welcome-card">
                 <div class="row align-items-center">
@@ -3882,8 +4452,65 @@
     <script>
         const backToTopBtn = document.getElementById('backToTopBtn');
         const darkModeToggleBtn = document.getElementById('darkModeToggleBtn');
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const installButtons = document.querySelectorAll('.js-install-pwa');
+        const pwaStatusMessage = document.getElementById('pwaStatusMessage');
+        let deferredPwaPrompt = null;
+
+        function updateThemeColor() {
+            if (!themeColorMeta) return;
+            const color = document.body.classList.contains('dark-mode') ? '#060917' : '#f3f5fb';
+            themeColorMeta.setAttribute('content', color);
+        }
+
+        function setPwaStatus(message, statusClass = 'status-info', icon = 'fa-circle-notch fa-spin') {
+            if (!pwaStatusMessage) return;
+            pwaStatusMessage.className = `status-chip ${statusClass}`;
+            pwaStatusMessage.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+        }
+
+        function updateInstallButtonsState(installed) {
+            installButtons.forEach(button => {
+                if (installed) {
+                    button.setAttribute('disabled', 'disabled');
+                } else {
+                    button.removeAttribute('disabled');
+                }
+            });
+        }
+
+        function handleInstallClick(event) {
+            event.preventDefault();
+
+            if (event.currentTarget.hasAttribute('disabled')) {
+                return;
+            }
+
+            if (deferredPwaPrompt) {
+                deferredPwaPrompt.prompt();
+                deferredPwaPrompt.userChoice
+                    .then(choiceResult => {
+                        if (choiceResult.outcome === 'accepted') {
+                            setPwaStatus('Installing…', 'status-info', 'fa-sync fa-spin');
+                            updateInstallButtonsState(true);
+                            showToast('Installing firstwebsideofdunc…', 'success');
+                        } else {
+                            showToast('Install dismissed. You can try again any time.', 'info');
+                        }
+                        deferredPwaPrompt = null;
+                    })
+                    .catch(error => {
+                        console.error('PWA install prompt failed', error);
+                        showToast('Unable to open the install prompt right now.', 'warning');
+                    });
+            } else {
+                setPwaStatus('Use your browser menu to add this app to your home screen.', 'status-info', 'fa-info-circle');
+                showToast('Use your browser menu to add this app to your home screen.', 'info');
+            }
+        }
 
         window.addEventListener('scroll', () => {
+            if (!backToTopBtn) return;
             if (window.scrollY > 200) {
                 backToTopBtn.style.display = 'block';
             } else {
@@ -3891,12 +4518,50 @@
             }
         });
 
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (backToTopBtn) {
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        if (darkModeToggleBtn) {
+            darkModeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeToggleBtn.innerHTML = '☀️';
+                } else {
+                    darkModeToggleBtn.innerHTML = '🌙';
+                }
+
+                darkModeToggleBtn.style.transform = 'rotate(360deg)';
+                setTimeout(() => {
+                    darkModeToggleBtn.style.transform = 'none';
+                }, 500);
+
+                updateThemeColor();
+            });
+        }
+
+        updateThemeColor();
+        setPwaStatus('Checking PWA status…', 'status-info', 'fa-circle-notch fa-spin');
+        updateInstallButtonsState(false);
+
+        installButtons.forEach(button => {
+            button.addEventListener('click', handleInstallClick);
         });
 
-        darkModeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredPwaPrompt = event;
+            setPwaStatus('Install prompt ready. Tap install to add the app.', 'status-success', 'fa-arrow-circle-down');
+            updateInstallButtonsState(false);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            setPwaStatus('App installed. Enjoy the experience offline!', 'status-success', 'fa-check');
+            updateInstallButtonsState(true);
+            showToast('firstwebsideofdunc installed! 🎉', 'success');
         });
 
         const memeCards = document.querySelectorAll('.meme-card');
@@ -3909,7 +4574,7 @@
             });
         });
 
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             const loadingOverlay = document.querySelector('.loading-overlay');
             if (loadingOverlay) {
                 loadingOverlay.style.opacity = '0';
@@ -3917,12 +4582,16 @@
                     loadingOverlay.style.display = 'none';
                 }, 100);
             }
-            
+
             document.querySelectorAll('img').forEach(img => {
                 if (!img.complete) {
                     img.src = img.src;
                 }
             });
+
+            loadRSSPreview();
+            await registerServiceWorker();
+            await checkPWACacheStatus();
         });
 
         document.querySelectorAll('.content-card').forEach(card => {
@@ -3943,29 +4612,6 @@
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'none';
             });
-        });
-
-        darkModeToggleBtn.addEventListener('click', () => {
-            darkModeToggleBtn.style.transform = 'rotate(360deg)';
-            setTimeout(() => {
-                darkModeToggleBtn.style.transform = 'none';
-            }, 500);
-            document.body.classList.toggle('dark-mode');
-        });
-
-        darkModeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            
-            if (document.body.classList.contains('dark-mode')) {
-                darkModeToggleBtn.innerHTML = '☀️';
-            } else {
-                darkModeToggleBtn.innerHTML = '🌙';
-            }
-
-            darkModeToggleBtn.style.transform = 'rotate(360deg)';
-            setTimeout(() => {
-                darkModeToggleBtn.style.transform = 'none';
-            }, 500);
         });
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -3993,6 +4639,178 @@
             const scrolled = (winScroll / height) * 100;
             document.querySelector('.scroll-progress').style.width = scrolled + '%';
         });
+
+        async function registerServiceWorker() {
+            if (!('serviceWorker' in navigator)) {
+                setPwaStatus('PWA features are not supported in this browser yet.', 'status-warning', 'fa-exclamation-triangle');
+                return null;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.register('sw.js');
+                setPwaStatus('Service worker active. Ready to install.', 'status-success', 'fa-check');
+                return registration;
+            } catch (error) {
+                console.error('Service worker registration failed:', error);
+                setPwaStatus('Unable to register the service worker right now.', 'status-error', 'fa-times');
+                showToast('Service worker registration failed. Try refreshing later.', 'warning');
+                return null;
+            }
+        }
+
+        async function checkPWACacheStatus() {
+            if (!('serviceWorker' in navigator)) {
+                setPwaStatus('PWA features are not supported in this browser yet.', 'status-warning', 'fa-exclamation-triangle');
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+
+                if (!registration) {
+                    setPwaStatus('Service worker not registered yet. Try refreshing the page.', 'status-warning', 'fa-sync');
+                    return;
+                }
+
+                if (!('caches' in window)) {
+                    setPwaStatus('Service worker active. Offline cache unavailable in this browser.', 'status-info', 'fa-info-circle');
+                    showToast('Service worker registered. Offline cache not available in this browser.', 'info');
+                    return;
+                }
+
+                const cacheNames = await caches.keys();
+                const hasAppCache = cacheNames.some(name => name.startsWith('firstwebsideofdunc-pwa'));
+
+                if (hasAppCache) {
+                    setPwaStatus('Offline content cached and ready!', 'status-success', 'fa-check');
+                    showToast('Offline content is cached and ready!', 'success');
+                } else {
+                    setPwaStatus('Service worker registered. Preparing offline cache…', 'status-info', 'fa-cloud-download-alt');
+                }
+            } catch (error) {
+                console.error('Unable to verify offline cache status', error);
+                setPwaStatus('Unable to verify offline cache status right now.', 'status-warning', 'fa-exclamation-triangle');
+            }
+        }
+
+        async function copyRSSFeed() {
+            const feedURL = new URL('rss.xml', window.location.href).href;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(feedURL);
+                    showToast('RSS feed URL copied to clipboard!', 'success');
+                    return;
+                } catch (error) {
+                    console.error('Clipboard copy failed:', error);
+                }
+            }
+
+            const manualCopy = window.prompt('Copy the RSS feed URL:', feedURL);
+            if (manualCopy !== null) {
+                showToast('RSS feed URL ready to paste.', 'info');
+            }
+        }
+
+        async function loadRSSPreview(forceRefresh = false) {
+            const previewContainer = document.getElementById('rssFeedPreview');
+            if (!previewContainer) {
+                return;
+            }
+
+            if (forceRefresh) {
+                showToast('Refreshing RSS preview…', 'info');
+            }
+
+            previewContainer.innerHTML = '<div class="rss-empty">Loading the latest stories…</div>';
+
+            try {
+                const response = await fetch('rss.xml', { cache: forceRefresh ? 'reload' : 'default' });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'application/xml');
+                const items = Array.from(doc.querySelectorAll('item')).slice(0, 4);
+
+                if (!items.length) {
+                    previewContainer.innerHTML = '<div class="rss-empty">No stories yet. Check back soon!</div>';
+                    return;
+                }
+
+                previewContainer.innerHTML = '';
+
+                items.forEach(item => {
+                    const title = item.querySelector('title')?.textContent?.trim() || 'Untitled update';
+                    const link = item.querySelector('link')?.textContent?.trim() || '';
+                    const description = item.querySelector('description')?.textContent?.trim() || '';
+                    const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
+
+                    let formattedDate = '';
+                    if (pubDate) {
+                        const parsedDate = new Date(pubDate);
+                        if (!Number.isNaN(parsedDate.getTime())) {
+                            formattedDate = parsedDate.toLocaleDateString(undefined, {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                            });
+                        }
+                    }
+
+                    const safeLink = link || 'rss.xml';
+
+                    const card = document.createElement('article');
+                    card.className = 'rss-card';
+
+                    const titleEl = document.createElement('h4');
+                    const linkEl = document.createElement('a');
+                    linkEl.href = safeLink;
+                    linkEl.target = '_blank';
+                    linkEl.rel = 'noopener';
+                    linkEl.textContent = title;
+                    titleEl.appendChild(linkEl);
+                    card.appendChild(titleEl);
+
+                    if (formattedDate) {
+                        const dateEl = document.createElement('div');
+                        dateEl.className = 'rss-date';
+                        dateEl.textContent = formattedDate;
+                        card.appendChild(dateEl);
+                    }
+
+                    if (description) {
+                        const descEl = document.createElement('p');
+                        descEl.className = 'rss-description';
+                        descEl.textContent = description.replace(/\s+/g, ' ').trim();
+                        card.appendChild(descEl);
+                    }
+
+                    if (safeLink) {
+                        const readMoreEl = document.createElement('div');
+                        const readMoreLink = document.createElement('a');
+                        readMoreLink.href = safeLink;
+                        readMoreLink.target = '_blank';
+                        readMoreLink.rel = 'noopener';
+                        readMoreLink.innerHTML = 'Read more <i class="fas fa-arrow-right ms-1"></i>';
+                        readMoreEl.appendChild(readMoreLink);
+                        card.appendChild(readMoreEl);
+                    }
+
+                    previewContainer.appendChild(card);
+                });
+
+                if (forceRefresh) {
+                    showToast('RSS preview refreshed.', 'success');
+                }
+            } catch (error) {
+                console.error('Unable to load RSS preview', error);
+                previewContainer.innerHTML = '<div class="rss-empty">Unable to load the RSS preview right now.</div>';
+                showToast('Unable to load the RSS preview right now.', 'warning');
+            }
+        }
 
         function showNotification(message) {
             const notification = document.createElement('div');
